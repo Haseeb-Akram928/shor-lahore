@@ -8,9 +8,9 @@ export const NOISE_TYPES = [
   'industrial',
   'animals',
   'sirens',
-  'religious',     // Loudspeakers — relevant in Lahore
+  'religious',     // Loudspeakers - relevant in Lahore
   'generators',    // Very common in Pakistan due to load-shedding
-  'horns',         // Pressure horns — huge Lahore problem
+  'horns',         // Pressure horns - huge Lahore problem
   'music',
   'other',
 ] as const;

@@ -19,7 +19,7 @@ declare global {
 }
 
 /**
- * Protect routes — requires valid JWT in httpOnly cookie named "token"
+ * Protect routes - requires valid JWT in httpOnly cookie named "token"
  */
 export const protect = async (req: Request, _res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
@@ -51,7 +51,7 @@ export const protect = async (req: Request, _res: Response, next: NextFunction) 
 };
 
 /**
- * Restrict to specific roles — must be called AFTER protect
+ * Restrict to specific roles - must be called AFTER protect
  */
 export const restrictTo = (...roles: UserRole[]) => {
   return (req: Request, _res: Response, next: NextFunction) => {

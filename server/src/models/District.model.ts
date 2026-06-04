@@ -45,7 +45,7 @@ const districtSchema = new Schema<IDistrictDocument>(
   }
 );
 
-// Geospatial index on polygon boundary — enables $geoIntersects point-in-polygon
+// Geospatial index on polygon boundary enables point-in-polygon queries.
 districtSchema.index({ boundary: '2dsphere' });
 
 export const District: Model<IDistrictDocument> = mongoose.model<IDistrictDocument>(

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { INoiseReport, NOISE_TYPES, REPORT_STATUSES } from '../types/index.js';
 
-export interface INoiseReportDocument extends Omit<INoiseReport, '_id' | 'user'>, Document {
+export interface INoiseReportDocument extends Omit<INoiseReport, '_id' | 'user' | 'upvotedBy'>, Document {
   user: mongoose.Types.ObjectId;
   upvotedBy: mongoose.Types.ObjectId[];
 }
@@ -102,7 +102,7 @@ const noiseReportSchema = new Schema<INoiseReportDocument>(
     timestamps: true, // createdAt and updatedAt
     toJSON: {
       transform(_doc, ret) {
-        delete ret.__v;
+        delete (ret as any).__v;
         return ret;
       },
     },

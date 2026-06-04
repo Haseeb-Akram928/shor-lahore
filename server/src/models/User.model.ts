@@ -76,8 +76,6 @@ const userSchema = new Schema<IUserDocument>(
 
 // Index for geospatial queries on user location
 userSchema.index({ location: '2dsphere' }, { sparse: true });
-// Index for email lookups
-userSchema.index({ email: 1 });
 
 // Pre-save hook: hash password
 userSchema.pre('save', async function (next) {

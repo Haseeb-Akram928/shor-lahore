@@ -15,13 +15,13 @@ export const initSocket = (httpServer: HttpServer): SocketServer => {
   });
 
   io.on('connection', (socket) => {
-    console.log(`🔌 Client connected: ${socket.id}`);
+    console.log(`Client connected: ${socket.id}`);
 
     // Client joins a geographic area room (bounding box hash)
     socket.on('join-area', (bounds: { north: number; south: number; east: number; west: number }) => {
       const roomName = `area_${bounds.south.toFixed(2)}_${bounds.west.toFixed(2)}_${bounds.north.toFixed(2)}_${bounds.east.toFixed(2)}`;
       socket.join(roomName);
-      console.log(`📍 ${socket.id} joined room: ${roomName}`);
+      console.log(`${socket.id} joined room: ${roomName}`);
     });
 
     socket.on('leave-area', (bounds: { north: number; south: number; east: number; west: number }) => {
@@ -35,7 +35,7 @@ export const initSocket = (httpServer: HttpServer): SocketServer => {
     });
 
     socket.on('disconnect', () => {
-      console.log(`🔌 Client disconnected: ${socket.id}`);
+      console.log(`Client disconnected: ${socket.id}`);
     });
   });
 

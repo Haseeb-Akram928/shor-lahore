@@ -37,7 +37,7 @@ if (env.NODE_ENV !== 'test') {
 
 // ============ ROUTES ============
 app.get('/api/health', (_req, res) => {
-  res.json({ success: true, message: 'ShorLahore API is running 🗺️', timestamp: new Date().toISOString() });
+  res.json({ success: true, message: 'ShorLahore API is running', timestamp: new Date().toISOString() });
 });
 
 app.use('/api/auth', authRoutes);

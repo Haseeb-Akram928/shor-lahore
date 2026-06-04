@@ -14,19 +14,13 @@ const start = async () => {
   await connectDB();
 
   httpServer.listen(env.PORT, () => {
-    console.log(`
-    ╔══════════════════════════════════════╗
-    ║   🔊  ShorLahore API Server          ║
-    ║   Port: ${env.PORT}                        ║
-    ║   Mode: ${env.NODE_ENV.padEnd(24)}║
-    ║   MongoDB: Connected ✅             ║
-    ║   Socket.io: Attached ✅            ║
-    ╚══════════════════════════════════════╝
-    `);
+    console.log(`ShorLahore API Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+    console.log('MongoDB connected');
+    console.log('Socket.io attached');
   });
 };
 
 start().catch((err) => {
-  console.error('❌ Failed to start server:', err);
+  console.error('Failed to start server:', err);
   process.exit(1);
 });

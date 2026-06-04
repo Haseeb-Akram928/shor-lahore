@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
+import type { StringValue } from 'ms';
 import { env } from '../config/env.js';
 
-export const signToken = (payload: { id: string; role: string }): string => {
+export const signToken = (payload: { userId: string; role: string }): string => {
   return jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN,
+    expiresIn: env.JWT_EXPIRES_IN as StringValue,
   });
 };
 
