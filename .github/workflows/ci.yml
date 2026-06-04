@@ -24,9 +24,12 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      # Step 3: Install dependencies for the whole monorepo
-      - name: Install Dependencies
-        run: npm run install:all
+      # Step 3: Install root and backend dependencies
+      - name: Install Root Dependencies
+        run: npm ci
+
+      - name: Install Backend Dependencies
+        run: npm ci --prefix server
 
       # Step 4: Run backend linters & syntax checks
       - name: Lint Backend
@@ -43,6 +46,4 @@ jobs:
           JWT_SECRET: testing-secret-key-at-least-32-characters-long
           MONGODB_URI: mongodb://localhost:27017/unused
 
-      # Step 7: Verify frontend builds without TS/Next.js errors
-      - name: Build Frontend (Next.js)
-        run: npm run build --prefix client
+      # Frontend build will be added after the client/ app is created.
