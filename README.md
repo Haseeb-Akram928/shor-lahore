@@ -8,6 +8,9 @@ The project lets residents report local noise by type, intensity, time, and loca
 
 - Geospatial noise reporting with GeoJSON coordinates
 - Lahore district mapping using geospatial queries
+- District API for listing districts, creating admin-managed districts, and fetching reports inside district boundaries
+- Analytics API for overview KPIs, trends, noise type breakdowns, district stats, hourly distribution, heatmap grids, top reporters, and recent reports
+- Seed script that generates Lahore-focused mock data for development and demos
 - JWT authentication with httpOnly cookies
 - MongoDB `2dsphere` indexes for location-based reports
 - Express API with TypeScript, Zod validation, and structured error handling
@@ -28,6 +31,25 @@ The project lets residents report local noise by type, intensity, time, and loca
 | CI | GitHub Actions |
 | Frontend | Next.js, MapLibre, deck.gl, Recharts, Nivo planned |
 
+## Current Status
+
+Phase 2 is complete.
+
+Implemented backend work:
+
+- Phase 1 backend foundation
+- District API
+- Analytics API
+- Seed data engine
+- GitHub Actions backend CI
+- Backend integration tests for health, districts, analytics, and seed data
+
+Seed data includes:
+
+- 10 Lahore districts
+- 25 mock users
+- 900 mock noise reports
+
 ## Project Structure
 
 ```text
@@ -42,6 +64,8 @@ NoisePollutionMapper/
 |   |   |-- middleware/        # Auth, validation, rate limit, error handling
 |   |   |-- models/            # Mongoose schemas
 |   |   |-- routes/            # API routes
+|   |   |-- scripts/           # Seed scripts
+|   |   |-- services/          # Analytics and business logic
 |   |   |-- test/              # Test setup
 |   |   |-- types/             # Shared TypeScript types
 |   |   |-- utils/             # JWT, password, error helpers
@@ -122,6 +146,8 @@ npm run test --prefix server
 ```
 
 Tests run against MongoDB Memory Server and do not touch the development database.
+
+Current backend coverage includes health, district routes, analytics routes, role protection, seed data integrity, and selected edge cases.
 
 ## Build
 
