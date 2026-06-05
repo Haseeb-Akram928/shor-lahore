@@ -1,0 +1,32 @@
+import type { Metadata } from 'next';
+import { AuthProvider } from '@/context/AuthContext';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { Navbar } from '@/components/layout/Navbar/Navbar';
+import { Footer } from '@/components/layout/Footer/Footer';
+import './globals.css';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'ShorLahore',
+    template: '%s | ShorLahore',
+  },
+  description: 'Crowdsourced noise pollution mapping and analytics for Lahore, Pakistan.',
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" data-theme="dark">
+      <body>
+        <ThemeProvider>
+          <AuthProvider>
+            <div className="app-shell">
+              <Navbar />
+              <main className="main-content">{children}</main>
+              <Footer />
+            </div>
+          </AuthProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}

@@ -17,6 +17,7 @@ The project lets residents report local noise by type, intensity, time, and loca
 - Socket.io foundation for real-time map and dashboard updates
 - Backend integration tests using Vitest, Supertest, and MongoDB Memory Server
 - GitHub Actions workflow for automated build and test checks
+- Next.js frontend foundation with responsive layout, auth pages, UI primitives, and theme/auth providers
 
 ## Tech Stack
 
@@ -29,11 +30,12 @@ The project lets residents report local noise by type, intensity, time, and loca
 | Real-time | Socket.io |
 | Testing | Vitest, Supertest, MongoDB Memory Server |
 | CI | GitHub Actions |
-| Frontend | Next.js, MapLibre, deck.gl, Recharts, Nivo planned |
+| Frontend | Next.js 15, React 19, TypeScript, CSS Modules |
+| Planned mapping and charts | MapLibre, deck.gl, Recharts, Nivo |
 
 ## Current Status
 
-Phase 2 is complete.
+Phase 3 is complete.
 
 Implemented backend work:
 
@@ -43,6 +45,7 @@ Implemented backend work:
 - Seed data engine
 - GitHub Actions backend CI
 - Backend integration tests for health, districts, analytics, and seed data
+- Frontend foundation with app shell, homepage, login/signup pages, admin shell, UI primitives, API client, Socket.io client, and theme/auth contexts
 
 Seed data includes:
 
@@ -57,6 +60,17 @@ NoisePollutionMapper/
 |-- .agent/                    # Agent-specific development rules
 |-- .github/workflows/         # GitHub Actions workflows
 |-- docs/plans/                # Planning and implementation documents
+|-- client/                    # Next.js frontend
+|   |-- src/
+|   |   |-- app/               # App Router pages and layouts
+|   |   |-- components/        # UI, forms, and layout components
+|   |   |-- context/           # Auth and theme providers
+|   |   |-- hooks/             # Frontend hooks
+|   |   |-- lib/               # API, socket, constants, utilities
+|   |   `-- types/             # Frontend TypeScript types
+|   |-- package.json
+|   |-- next.config.ts
+|   `-- tsconfig.json
 |-- server/                    # Express API server
 |   |-- src/
 |   |   |-- config/            # Environment, database, Socket.io setup
@@ -101,6 +115,7 @@ From the root directory:
 ```bash
 npm install
 npm install --prefix server
+npm install --prefix client
 ```
 
 ### Configure Environment
@@ -163,6 +178,12 @@ Build all configured workspaces:
 npm run build
 ```
 
+Lint the frontend:
+
+```bash
+npm run lint --prefix client
+```
+
 ## Continuous Integration
 
 GitHub Actions is configured in:
@@ -172,6 +193,8 @@ GitHub Actions is configured in:
 ```
 
 The workflow is intended to install dependencies, build the backend, and run the backend test suite on pushes and pull requests.
+
+It also installs and builds the frontend client.
 
 ## Development Rule
 

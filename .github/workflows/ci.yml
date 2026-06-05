@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+            client/package-lock.json
 
       # Step 3: Install root and backend dependencies
       - name: Install Root Dependencies
@@ -30,6 +34,9 @@ jobs:
 
       - name: Install Backend Dependencies
         run: npm ci --prefix server
+
+      - name: Install Frontend Dependencies
+        run: npm ci --prefix client
 
       # Step 4: Run backend linters & syntax checks
       - name: Lint Backend
@@ -46,4 +53,9 @@ jobs:
           JWT_SECRET: testing-secret-key-at-least-32-characters-long
           MONGODB_URI: mongodb://localhost:27017/unused
 
-      # Frontend build will be added after the client/ app is created.
+      # Step 7: Verify frontend builds without TS/Next.js errors
+      - name: Lint Frontend
+        run: npm run lint --prefix client
+
+      - name: Build Frontend
+        run: npm run build --prefix client

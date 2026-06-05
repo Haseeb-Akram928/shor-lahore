@@ -1,0 +1,28 @@
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 12px;
+}
+
+.invalid {
+  border-color: var(--danger);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.82rem;
+}

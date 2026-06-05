@@ -1,0 +1,21 @@
+.page {
+  display: grid;
+  gap: 20px;
+}
+
+.page h1 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
