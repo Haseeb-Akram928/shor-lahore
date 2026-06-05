@@ -7,7 +7,7 @@ let mongoServer: MongoMemoryServer;
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET = 'testing-secret-key-at-least-32-characters-long';
 process.env.MONGODB_URI = 'mongodb://localhost:27017/test-placeholder';
-process.env.MONGOMS_VERSION = '4.4.24'; // Much smaller binary size (~75MB) to prevent network download resets
+process.env.MONGOMS_VERSION = '7.0.14'; // 4.4 needs libcrypto.so.1.1 on ubuntu-latest; 7.x is compatible with OpenSSL 3
 
 // Before all tests run, spin up the in-memory MongoDB database
 beforeAll(async () => {
