@@ -4,6 +4,9 @@ export default defineConfig({
   test: {
     setupFiles: ['./src/test/setup.ts'],
     environment: 'node',
-    hookTimeout: 1200000, // 20 minutes to allow initial download of 509MB mongodb binary over slower connections
+    fileParallelism: false,
+    maxWorkers: 1,
+    minWorkers: 1,
+    hookTimeout: 1200000, // Allows the initial MongoDB binary download on slower CI runners.
   },
 });
