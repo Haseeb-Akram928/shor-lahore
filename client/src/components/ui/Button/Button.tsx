@@ -36,7 +36,7 @@ export function Button(props: NativeButtonProps | LinkButtonProps) {
     );
   }
 
-  const { asChild: _asChild, disabled, type = 'button', ...buttonProps } = props;
+  const { asChild: _asChild, isLoading: _isLoading, disabled, type = 'button', ...buttonProps } = props;
   return (
     <button {...buttonProps} type={type} disabled={disabled || isLoading} className={classes}>
       {isLoading && <Loader2 size={16} className={styles.spinner} aria-hidden="true" />}

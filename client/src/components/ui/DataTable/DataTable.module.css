@@ -4,6 +4,8 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
+  box-shadow: var(--shadow);
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .table {
@@ -14,22 +16,56 @@
 
 .table th,
 .table td {
-  padding: 12px;
+  padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid var(--border);
 }
 
 .table th {
-  color: var(--text-muted);
-  font-size: 0.82rem;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--surface-muted) 50%, var(--surface));
+}
+
+.table tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--brand) 4%, transparent);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .state {
-  min-height: 96px;
+  min-height: 120px;
   display: grid;
   place-items: center;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text-muted);
   background: var(--surface);
+  font-size: 0.92rem;
+  animation: fadeIn 0.3s ease both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

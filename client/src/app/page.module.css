@@ -1,33 +1,71 @@
 .hero {
-  padding: 48px 0 32px;
-  background:
-    linear-gradient(120deg, rgba(15, 118, 110, 0.12), transparent 34%),
-    linear-gradient(40deg, rgba(219, 39, 119, 0.08), transparent 42%);
+  padding: 64px 0 48px;
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-hero);
+}
+
+/* Animated background orbs */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 500px;
+  height: 500px;
+  background: var(--brand);
+  top: -120px;
+  left: -80px;
+  animation-delay: 0s;
+}
+
+.hero::after {
+  width: 400px;
+  height: 400px;
+  background: var(--accent);
+  bottom: -100px;
+  right: -60px;
+  animation-delay: -4s;
 }
 
 .heroGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
-  gap: 32px;
+  gap: 48px;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .heroCopy {
   min-width: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .heroCopy h1 {
-  margin: 18px 0 14px;
+  margin: 18px 0 16px;
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 7vw, 5.4rem);
-  line-height: 0.98;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--text) 0%, var(--brand) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .heroCopy p {
-  max-width: 640px;
+  max-width: 500px;
   margin: 0;
   color: var(--text-muted);
-  font-size: 1.08rem;
+  font-size: 1.1rem;
   line-height: 1.7;
 }
 
@@ -35,16 +73,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 32px;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
 }
 
 .mapPreview {
   min-height: 380px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--glass-border);
   overflow: hidden;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+  position: relative;
 }
 
 .mapHeader {
@@ -52,9 +95,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 18px;
   border-bottom: 1px solid var(--border);
-  color: var(--text-muted);
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.mapHeader svg {
+  color: var(--success);
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 .grid {
@@ -64,25 +115,56 @@
   grid-template-columns: repeat(12, 1fr);
   gap: 7px;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     var(--surface-muted);
   background-size: 28px 28px;
 }
 
 .cell {
   border-radius: 4px;
-  background: color-mix(in srgb, var(--brand) 36%, transparent);
+  background: color-mix(in srgb, var(--brand) 30%, transparent);
+  transition: background var(--transition-smooth), transform var(--transition-fast);
+  animation: cellFadeIn 0.4s ease both;
 }
 
+.cell:nth-child(1) { animation-delay: 0.02s; }
+.cell:nth-child(2) { animation-delay: 0.03s; }
+.cell:nth-child(3) { animation-delay: 0.04s; }
+.cell:nth-child(4) { animation-delay: 0.05s; }
+.cell:nth-child(5) { animation-delay: 0.06s; }
+.cell:nth-child(6) { animation-delay: 0.07s; }
+.cell:nth-child(7) { animation-delay: 0.08s; }
+.cell:nth-child(8) { animation-delay: 0.09s; }
+.cell:nth-child(9) { animation-delay: 0.10s; }
+.cell:nth-child(10) { animation-delay: 0.11s; }
+.cell:nth-child(11) { animation-delay: 0.12s; }
+.cell:nth-child(12) { animation-delay: 0.13s; }
+
 .cell:nth-child(4n) {
-  background: color-mix(in srgb, var(--warning) 60%, transparent);
+  background: color-mix(in srgb, var(--warning) 55%, transparent);
+  animation: cell-pulse 4s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
 .cell:nth-child(9n) {
-  background: color-mix(in srgb, var(--danger) 68%, transparent);
+  background: color-mix(in srgb, var(--danger) 60%, transparent);
+  animation: cell-pulse 3.5s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
+.cell:nth-child(7n) {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  animation: cell-pulse 5s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+.cell:hover {
+  transform: scale(1.2);
+  background: color-mix(in srgb, var(--brand) 70%, transparent);
+}
+
+/* ─── Stats section ─── */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -91,18 +173,27 @@
 
 .statCard {
   display: grid;
-  gap: 4px;
+  gap: 6px;
+  text-align: center;
 }
 
 .statCard strong {
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .statCard span {
   color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
+/* ─── Feature grid ─── */
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -118,13 +209,69 @@
   margin: 0;
   color: var(--text-muted);
   line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.featureGrid svg {
+  color: var(--brand);
+  transition: transform var(--transition-smooth);
+}
+
+.featureGrid > div:hover svg {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+/* ─── Responsive ─── */
+@keyframes cellFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cell-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; filter: drop-shadow(0 0 6px var(--success)); }
 }
 
 @media (max-width: 860px) {
+  .hero {
+    padding: 40px 0 32px;
+  }
+
   .heroGrid,
   .stats,
   .featureGrid {
     grid-template-columns: 1fr;
+  }
+
+  .heroGrid {
+    gap: 32px;
   }
 
   .mapPreview {
@@ -134,11 +281,19 @@
   .grid {
     height: 252px;
   }
+
+  .statCard {
+    text-align: left;
+  }
 }
 
 @media (max-width: 420px) {
   .hero {
     padding-top: 28px;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
   }
 
   .actions {
@@ -153,5 +308,9 @@
     height: 212px;
     grid-template-columns: repeat(8, 1fr);
     gap: 6px;
+  }
+
+  .stats {
+    gap: 12px;
   }
 }

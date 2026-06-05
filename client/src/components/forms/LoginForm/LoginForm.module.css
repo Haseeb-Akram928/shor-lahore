@@ -1,16 +1,54 @@
 .form {
   display: grid;
-  gap: 16px;
+  gap: 18px;
 }
 
+/* Staggered field entry */
+.form > *:nth-child(1) { animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.05s both; }
+.form > *:nth-child(2) { animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both; }
+.form > *:nth-child(3) { animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both; }
+.form > *:nth-child(4) { animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both; }
+
 .alert {
-  min-height: 44px;
+  min-height: 46px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, var(--border));
   border-radius: var(--radius);
   color: var(--danger);
-  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
-  padding: 10px 12px;
+  background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: shake 0.4s ease both, fadeIn 0.2s ease both;
+}
+
+.alert svg {
+  flex-shrink: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  75% { transform: translateX(-1px); }
 }

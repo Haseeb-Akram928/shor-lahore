@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 :root {
   --bg: #f7f8fb;
   --surface: #ffffff;
@@ -20,14 +22,29 @@
   --font-sans: Inter, Arial, Helvetica, sans-serif;
   --font-display: Outfit, Inter, Arial, Helvetica, sans-serif;
   --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* ─── NEW: Premium design tokens ─── */
+  --glow-brand: 0 0 20px rgba(15, 118, 110, 0.25);
+  --glow-accent: 0 0 20px rgba(219, 39, 119, 0.2);
+  --gradient-brand: linear-gradient(135deg, #0f766e, #2dd4bf);
+  --gradient-accent: linear-gradient(135deg, #db2777, #f472b6);
+  --gradient-hero: linear-gradient(135deg, rgba(15, 118, 110, 0.12), transparent 40%),
+                   linear-gradient(225deg, rgba(219, 39, 119, 0.08), transparent 50%);
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow-lg: 0 20px 60px rgba(21, 32, 43, 0.12);
+  --shadow-glow: 0 0 30px rgba(15, 118, 110, 0.15);
 }
 
 [data-theme='dark'] {
-  --bg: #101418;
-  --surface: #161c22;
-  --surface-muted: #202831;
-  --border: #303b47;
-  --border-strong: #465465;
+  --bg: #0a0e13;
+  --surface: #111820;
+  --surface-muted: #1a222c;
+  --border: #243040;
+  --border-strong: #354560;
   --text: #eef2f6;
   --text-muted: #aeb9c5;
   --text-soft: #7f8c99;
@@ -37,8 +54,23 @@
   --danger: #f87171;
   --warning: #facc15;
   --success: #4ade80;
-  --shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+
+  /* ─── Dark overrides ─── */
+  --glow-brand: 0 0 30px rgba(45, 212, 191, 0.2);
+  --glow-accent: 0 0 30px rgba(244, 114, 182, 0.15);
+  --gradient-brand: linear-gradient(135deg, #14b8a6, #2dd4bf);
+  --gradient-hero: linear-gradient(135deg, rgba(45, 212, 191, 0.08), transparent 45%),
+                   linear-gradient(225deg, rgba(244, 114, 182, 0.06), transparent 50%);
+  --glass: rgba(17, 24, 32, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(45, 212, 191, 0.1);
 }
+
+/* ═══════════════════════════════════════
+   RESETS & BASE
+   ═══════════════════════════════════════ */
 
 * {
   box-sizing: border-box;
@@ -48,6 +80,9 @@ html {
   min-width: 320px;
   background: var(--bg);
   color: var(--text);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -56,7 +91,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
 }
 
 button,
@@ -81,10 +117,33 @@ svg {
   max-width: 100%;
 }
 
+::selection {
+  background: color-mix(in srgb, var(--brand) 30%, transparent);
+  color: var(--text);
+}
+
 :focus-visible {
   outline: none;
   box-shadow: var(--focus);
 }
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY SCALE
+   ═══════════════════════════════════════ */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
+h3 { font-size: clamp(1.1rem, 2vw, 1.25rem); }
+
+/* ═══════════════════════════════════════
+   LAYOUT SHELLS
+   ═══════════════════════════════════════ */
 
 .app-shell {
   min-height: 100vh;
@@ -110,6 +169,109 @@ svg {
   color: var(--text-muted);
 }
 
+/* ═══════════════════════════════════════
+   GLOBAL KEYFRAMES
+   ═══════════════════════════════════════ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(45, 212, 191, 0.15); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cell-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  75% { transform: translateX(-1px); }
+}
+
+/* ═══════════════════════════════════════
+   ANIMATION UTILITIES
+   ═══════════════════════════════════════ */
+
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+
+.scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+
 @media (max-width: 420px) {
   .container {
     width: min(100% - 24px, 1120px);
@@ -117,5 +279,20 @@ svg {
 
   .page-band {
     padding: 28px 0;
+  }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

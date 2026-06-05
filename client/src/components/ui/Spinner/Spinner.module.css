@@ -5,6 +5,8 @@
 }
 
 .spinner svg {
+  color: var(--brand);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--brand) 40%, transparent));
   animation: spin 800ms linear infinite;
 }
 

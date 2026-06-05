@@ -1,13 +1,17 @@
 .skeleton {
   min-height: 18px;
   border-radius: var(--radius);
-  background: linear-gradient(90deg, var(--surface-muted), var(--border), var(--surface-muted));
-  background-size: 200% 100%;
-  animation: pulse 1.2s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted) 25%,
+    color-mix(in srgb, var(--border) 60%, var(--surface-muted)) 37%,
+    var(--surface-muted) 63%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  to {
-    background-position: -200% 0;
-  }
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
