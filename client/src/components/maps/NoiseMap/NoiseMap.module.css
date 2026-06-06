@@ -1,0 +1,155 @@
+.shell {
+  min-height: calc(100vh - var(--header-height));
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  background: var(--bg);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 22px;
+  z-index: 2;
+}
+
+.sidebar h1 {
+  margin: 14px 0 8px;
+  font-size: 1.7rem;
+}
+
+.sidebar p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.metricGrid div {
+  display: grid;
+  gap: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-muted);
+  padding: 12px;
+}
+
+.metricGrid strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.metricGrid span,
+.field span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field input {
+  width: 100%;
+  accent-color: var(--brand);
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.error {
+  display: flex;
+  gap: 8px;
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  border-radius: 10px;
+  color: var(--danger);
+  padding: 12px;
+}
+
+.mapWrap {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.mapWrap :global(.maplibregl-map) {
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  position: absolute;
+  inset: 16px;
+  z-index: 3;
+  min-height: auto;
+  pointer-events: none;
+}
+
+.slider {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 4;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mapWrap {
+    min-height: 620px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sidebar {
+    padding: 16px 12px;
+  }
+
+  .metricGrid,
+  .legend {
+    grid-template-columns: 1fr;
+  }
+
+  .mapWrap {
+    min-height: 560px;
+  }
+
+  .slider {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+}

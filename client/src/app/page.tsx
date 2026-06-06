@@ -7,7 +7,7 @@ import styles from './page.module.css';
 const highlights = [
   { label: 'Districts seeded', value: '10' },
   { label: 'Mock reports', value: '900' },
-  { label: 'Noise categories', value: '12' },
+  { label: 'Live map filters', value: '24h' },
 ];
 
 export default function Home() {
@@ -17,15 +17,15 @@ export default function Home() {
         <div className="container">
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <Badge tone="brand">Phase 3 frontend foundation</Badge>
+              <Badge tone="brand">Phase 4 map and public pages</Badge>
               <h1>ShorLahore</h1>
               <p>
                 A civic noise mapping workspace for Lahore, built around geospatial reports,
                 district analytics, and real-time map updates.
               </p>
               <div className={styles.actions}>
-                <Button asChild href="/login">Admin login</Button>
-                <Button asChild href="/signup" variant="secondary">Create account</Button>
+                <Button asChild href="/map">Explore map</Button>
+                <Button asChild href="/report" variant="secondary">Report noise</Button>
               </div>
             </div>
 
@@ -63,7 +63,7 @@ export default function Home() {
             <Card>
               <MapPin size={22} />
               <h2>Location-aware reports</h2>
-              <p>GeoJSON coordinates and district polygons prepare the app for map-driven reporting.</p>
+              <p>Submit noise observations with a map-selected point, source, time, and intensity.</p>
             </Card>
             <Card>
               <BarChart3 size={22} />
@@ -72,8 +72,8 @@ export default function Home() {
             </Card>
             <Card>
               <Activity size={22} />
-              <h2>Real-time foundation</h2>
-              <p>Socket.io helpers are wired for live reports, dashboard feeds, and future map updates.</p>
+              <h2>Interactive noise map</h2>
+              <p>MapLibre and deck.gl render report markers, heat layers, and hourly filtering.</p>
             </Card>
           </div>
         </div>

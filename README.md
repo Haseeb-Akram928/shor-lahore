@@ -15,6 +15,9 @@ The project lets residents report local noise by type, intensity, time, and loca
 - MongoDB `2dsphere` indexes for location-based reports
 - Express API with TypeScript, Zod validation, and structured error handling
 - Socket.io foundation for real-time map and dashboard updates
+- Interactive Lahore noise map with MapLibre and deck.gl heatmap rendering
+- Noise report submission flow with map-based location picking
+- Public districts page with loading, empty, and error states
 - Backend integration tests using Vitest, Supertest, and MongoDB Memory Server
 - GitHub Actions workflow for automated build and test checks
 - Next.js frontend foundation with responsive layout, auth pages, UI primitives, and theme/auth providers
@@ -31,11 +34,11 @@ The project lets residents report local noise by type, intensity, time, and loca
 | Testing | Vitest, Supertest, MongoDB Memory Server |
 | CI | GitHub Actions |
 | Frontend | Next.js 15, React 19, TypeScript, CSS Modules |
-| Planned mapping and charts | MapLibre, deck.gl, Recharts, Nivo |
+| Mapping and charts | MapLibre, deck.gl, Recharts, Nivo |
 
 ## Current Status
 
-Phase 3 is complete.
+Phase 4 is complete.
 
 Implemented backend work:
 
@@ -46,6 +49,7 @@ Implemented backend work:
 - GitHub Actions backend CI
 - Backend integration tests for health, districts, analytics, and seed data
 - Frontend foundation with app shell, homepage, login/signup pages, admin shell, UI primitives, API client, Socket.io client, and theme/auth contexts
+- Phase 4 public pages: interactive map, heatmap overlay, time/intensity filters, report form, and districts view
 
 Seed data includes:
 

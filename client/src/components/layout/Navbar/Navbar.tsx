@@ -11,6 +11,7 @@ import styles from './Navbar.module.css';
 const links = [
   { href: '/', label: 'Home' },
   { href: '/map', label: 'Map' },
+  { href: '/report', label: 'Report' },
   { href: '/districts', label: 'Districts' },
   { href: '/admin', label: 'Admin' },
 ];

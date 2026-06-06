@@ -27,7 +27,15 @@ export function Button(props: NativeButtonProps | LinkButtonProps) {
   const classes = cx(styles.button, styles[variant], isLoading && styles.loading, className);
 
   if (props.asChild) {
-    const { asChild: _asChild, href, ...linkProps } = props;
+    const {
+      asChild: _asChild,
+      href,
+      variant: _variant,
+      isLoading: _linkIsLoading,
+      className: _linkClassName,
+      children: _linkChildren,
+      ...linkProps
+    } = props;
     return (
       <Link {...linkProps} href={href} className={classes} aria-disabled={isLoading || linkProps['aria-disabled']}>
         {isLoading && <Loader2 size={16} className={styles.spinner} aria-hidden="true" />}
@@ -36,7 +44,16 @@ export function Button(props: NativeButtonProps | LinkButtonProps) {
     );
   }
 
-  const { asChild: _asChild, isLoading: _isLoading, disabled, type = 'button', ...buttonProps } = props;
+  const {
+    asChild: _asChild,
+    variant: _variant,
+    isLoading: _isLoading,
+    className: _buttonClassName,
+    children: _buttonChildren,
+    disabled,
+    type = 'button',
+    ...buttonProps
+  } = props;
   return (
     <button {...buttonProps} type={type} disabled={disabled || isLoading} className={classes}>
       {isLoading && <Loader2 size={16} className={styles.spinner} aria-hidden="true" />}

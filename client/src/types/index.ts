@@ -47,6 +47,26 @@ export interface NoiseReport {
   upvotes: number;
 }
 
+export interface HeatmapPoint {
+  _id: string;
+  coordinates: [number, number];
+  intensity: number;
+  noiseType: NoiseType;
+  district?: string;
+  description?: string;
+  occurredAt: string;
+  createdAt: string;
+  upvotes: number;
+}
+
+export interface District {
+  _id: string;
+  name: string;
+  city: string;
+  avgNoiseLevel: number;
+  totalReports: number;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data: T;

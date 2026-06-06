@@ -1,0 +1,146 @@
+.form {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, 440px);
+  gap: 22px;
+}
+
+.mapColumn {
+  min-width: 0;
+}
+
+.panel {
+  display: grid;
+  gap: 16px;
+}
+
+.header h1 {
+  margin: 12px 0 6px;
+}
+
+.header p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.alert,
+.success {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.alert {
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+}
+
+.success {
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 45%, var(--border));
+  background: color-mix(in srgb, var(--success) 10%, var(--surface));
+}
+
+.range,
+.textarea {
+  display: grid;
+  gap: 7px;
+}
+
+.range span,
+.textarea span {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.range input {
+  width: 100%;
+  accent-color: var(--brand);
+}
+
+.textarea textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 12px;
+}
+
+.textarea small,
+.note {
+  color: var(--text-muted);
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-muted);
+  padding: 12px;
+}
+
+.preview svg {
+  color: var(--brand);
+}
+
+.preview div {
+  display: grid;
+}
+
+.preview span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.note {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.note a {
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.authRequired {
+  width: min(520px, calc(100% - 32px));
+  margin: 48px auto;
+  display: grid;
+  gap: 14px;
+}
+
+.authRequired h1 {
+  margin: 0;
+}
+
+@media (max-width: 880px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .form {
+    width: min(100% - 24px, 1180px);
+    padding: 20px 0;
+  }
+
+  .actions {
+    display: grid;
+  }
+}
