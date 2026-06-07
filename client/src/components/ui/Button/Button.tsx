@@ -39,7 +39,7 @@ export function Button(props: NativeButtonProps | LinkButtonProps) {
     return (
       <Link {...linkProps} href={href} className={classes} aria-disabled={isLoading || linkProps['aria-disabled']}>
         {isLoading && <Loader2 size={16} className={styles.spinner} aria-hidden="true" />}
-        <span>{children}</span>
+        {children}
       </Link>
     );
   }
@@ -57,7 +57,7 @@ export function Button(props: NativeButtonProps | LinkButtonProps) {
   return (
     <button {...buttonProps} type={type} disabled={disabled || isLoading} className={classes}>
       {isLoading && <Loader2 size={16} className={styles.spinner} aria-hidden="true" />}
-      <span>{children}</span>
+      {children}
     </button>
   );
 }

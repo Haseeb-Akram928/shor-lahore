@@ -25,7 +25,7 @@ const userSchema = new Schema<IUserDocument>(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      // Google OAuth users do not have a local password.
       minlength: [8, 'Password must be at least 8 characters'],
       select: false, // Never return password by default
     },
@@ -37,6 +37,16 @@ const userSchema = new Schema<IUserDocument>(
     avatar: {
       type: String,
       default: undefined,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null values
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local',
     },
     reportsCount: {
       type: Number,
@@ -77,15 +87,16 @@ const userSchema = new Schema<IUserDocument>(
 // Index for geospatial queries on user location
 userSchema.index({ location: '2dsphere' }, { sparse: true });
 
-// Pre-save hook: hash password
+// Pre-save hook: hash password (only if password exists and is modified)
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.password || !this.isModified('password')) return next();
   this.password = await hashPassword(this.password);
   next();
 });
 
-// Instance method: compare password
+// Instance method: compare password (returns false for OAuth users without password)
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+  if (!this.password) return false;
   return comparePassword(candidatePassword, this.password);
 };
 

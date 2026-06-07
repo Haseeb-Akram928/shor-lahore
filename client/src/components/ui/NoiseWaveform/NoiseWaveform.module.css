@@ -1,0 +1,41 @@
+.waveform {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 80px;
+  padding: 0 8px;
+  opacity: 0.5;
+}
+
+.bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--bar-color, var(--brand));
+  height: var(--bar-height, 40%);
+  animation: wave 1.8s ease-in-out infinite alternate;
+  animation-delay: var(--bar-delay, 0s);
+  transform-origin: bottom;
+}
+
+@keyframes wave {
+  0% {
+    transform: scaleY(0.4);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 420px) {
+  .waveform {
+    height: 50px;
+    gap: 2px;
+  }
+
+  .bar {
+    width: 2px;
+  }
+}

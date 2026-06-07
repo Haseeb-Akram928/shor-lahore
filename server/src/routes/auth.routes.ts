@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getMe, login, logout, register } from '../controllers/auth.controller.js';
+import { getMe, googleCallback, googleRedirect, login, logout, register } from '../controllers/auth.controller.js';
 import { protect } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
@@ -10,5 +10,9 @@ router.post('/register', validate(registerSchema), register);
 router.post('/login', validate(loginSchema), login);
 router.post('/logout', logout);
 router.get('/me', protect, getMe);
+
+// Google OAuth
+router.get('/google', googleRedirect);
+router.get('/google/callback', googleCallback);
 
 export default router;

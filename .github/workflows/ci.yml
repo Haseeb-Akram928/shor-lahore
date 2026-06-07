@@ -11,6 +11,16 @@ jobs:
   verify:
     name: Build, Lint, and Test
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       # Step 1: Download the source code from GitHub onto the container
@@ -51,7 +61,7 @@ jobs:
         run: npm run test --prefix server
         env:
           JWT_SECRET: testing-secret-key-at-least-32-characters-long
-          MONGODB_URI: mongodb://localhost:27017/unused
+          MONGODB_URI: mongodb://127.0.0.1:27017/shorlahore_test
 
       # Step 7: Verify frontend builds without TS/Next.js errors
       - name: Lint Frontend

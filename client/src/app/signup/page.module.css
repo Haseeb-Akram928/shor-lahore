@@ -8,23 +8,6 @@
   background: var(--gradient-hero);
 }
 
-/* Ambient background orb */
-.page::before {
-  content: '';
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: var(--accent);
-  filter: blur(120px);
-  opacity: 0.05;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: float 10s ease-in-out infinite;
-}
-
 .panel {
   width: min(460px, 100%);
   position: relative;
@@ -78,9 +61,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(-50%, -50%); }
-  50% { transform: translate(-50%, calc(-50% - 20px)); }
 }

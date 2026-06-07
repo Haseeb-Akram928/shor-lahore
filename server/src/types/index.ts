@@ -39,9 +39,11 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   role: UserRole;
   avatar?: string;
+  googleId?: string;
+  authProvider: 'local' | 'google';
   reportsCount: number;
   reputation: number;
   location?: GeoJSONPoint;
