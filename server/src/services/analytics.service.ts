@@ -231,7 +231,7 @@ export const getByHourStats = async (period: string) => {
     },
   ]);
 
-  const hourlyMap = new Map(hourly.map(h => [h.hour, h]));
+  const hourlyMap = new Map(hourly.map((h: { hour: number; count: number; avgIntensity: number }) => [h.hour, h]));
   const result = Array.from({ length: 24 }, (_, hour) => {
     return hourlyMap.get(hour) || { hour, count: 0, avgIntensity: 0 };
   });

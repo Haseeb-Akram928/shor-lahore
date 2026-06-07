@@ -175,7 +175,7 @@ export async function upvoteReport(reportId: string, userId: string) {
     throw ApiError.notFound('Report not found');
   }
 
-  const alreadyUpvoted = report.upvotedBy.some((id) => id.toString() === userId);
+  const alreadyUpvoted = report.upvotedBy.some((id: mongoose.Types.ObjectId) => id.toString() === userId);
   if (alreadyUpvoted) {
     throw ApiError.badRequest('Report already upvoted by this user');
   }

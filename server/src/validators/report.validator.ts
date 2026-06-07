@@ -12,7 +12,7 @@ export const createReportSchema = z.object({
   description: z.string().trim().max(500).optional().default(''),
   district: z.string().trim().max(80).optional(),
   tags: z.array(z.string().trim().max(32)).max(10).optional().default([]),
-  occurredAt: z.coerce.date().refine((date) => date <= new Date(), 'Occurrence time cannot be in the future'),
+  occurredAt: z.coerce.date().refine((date: Date) => date <= new Date(), 'Occurrence time cannot be in the future'),
 });
 
 export const heatmapQuerySchema = z.object({
@@ -24,7 +24,7 @@ export const heatmapQuerySchema = z.object({
   minIntensity: z.coerce.number().int().min(1).max(10).optional().default(1),
   maxIntensity: z.coerce.number().int().min(1).max(10).optional().default(10),
   limit: z.coerce.number().int().min(1).max(1000).optional().default(700),
-}).superRefine((query, ctx) => {
+}).superRefine((query: { swLng?: number; swLat?: number; neLng?: number; neLat?: number; hour?: number; minIntensity: number; maxIntensity: number; limit: number }, ctx: z.RefinementCtx) => {
   const bounds = [query.swLng, query.swLat, query.neLng, query.neLat];
   const providedBounds = bounds.filter((value) => value !== undefined);
 

@@ -316,10 +316,10 @@ export const runSeed = async (disconnectOnFinish = true) => {
     }));
 
     for (const district of createdDistricts) {
-      const reports = createdReports.filter(r => r.district === district.name);
+      const reports = createdReports.filter((r: { district?: string; intensity: number }) => r.district === district.name);
       if (reports.length > 0) {
         const total = reports.length;
-        const sumIntensity = reports.reduce((acc, curr) => acc + curr.intensity, 0);
+        const sumIntensity = reports.reduce((acc: number, curr: { intensity: number }) => acc + curr.intensity, 0);
         const avg = Math.round((sumIntensity / total) * 10) / 10;
         
         district.totalReports = total;

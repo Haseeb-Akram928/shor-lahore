@@ -50,7 +50,7 @@ jobs:
 
       # Step 4: Run backend linters & syntax checks
       - name: Lint Backend
-        run: npm run lint --prefix server || true
+        run: npm run lint --prefix server
 
       # Step 5: Verify backend builds without TS errors
       - name: Build Backend
@@ -60,6 +60,7 @@ jobs:
       - name: Run Backend Tests
         run: npm run test --prefix server
         env:
+          NODE_ENV: test
           JWT_SECRET: testing-secret-key-at-least-32-characters-long
           MONGODB_URI: mongodb://127.0.0.1:27017/shorlahore_test
 
