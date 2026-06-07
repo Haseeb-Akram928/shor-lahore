@@ -174,38 +174,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features and live feed */}
+      {/* ═══ FEATURES BENTO GRID ═══ */}
       <section className={`page-band ${styles.section}`}>
         <div className="container">
-          <div className={styles.splitSection}>
-            <div>
-              <div className={styles.sectionHeader} style={{ textAlign: 'left', alignItems: 'flex-start' }}>
-                <Badge tone="brand">Platform</Badge>
-                <h2>Built for real impact</h2>
-                <p>A full-stack platform with real geospatial engineering, not a toy CRUD app.</p>
-              </div>
-              <div className={styles.featureList}>
-                {features.map((feature, index) => {
-                  const Icon = feature.icon;
-                  return (
-                    <div
-                      key={feature.title}
-                      className={styles.featureItem}
-                      style={{ animationDelay: `${index * 0.06}s` }}
-                    >
-                      <span className={styles.featureIcon}>
-                        <Icon size={18} />
-                      </span>
-                      <div>
-                        <strong>{feature.title}</strong>
-                        <p>{feature.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className={styles.tickerColumn}>
+          <div className={styles.sectionHeader}>
+            <Badge tone="brand">Platform</Badge>
+            <h2>Built for real impact</h2>
+            <p>A full-stack platform with real geospatial engineering, not a toy CRUD app.</p>
+          </div>
+          <div className={styles.bentoGrid}>
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={feature.title}
+                  className={styles.bentoCard}
+                  style={{ animationDelay: `${index * 0.07}s` }}
+                >
+                  <span className={styles.bentoIcon}>
+                    <Icon size={24} />
+                  </span>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                  <span className={styles.bentoGlow} aria-hidden="true" />
+                </div>
+              );
+            })}
+            <div className={`${styles.bentoCard} ${styles.bentoTicker}`}>
               <ActivityTicker />
             </div>
           </div>

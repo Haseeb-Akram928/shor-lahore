@@ -57,8 +57,32 @@ export function Navbar() {
           {links.map((link) => (
             <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)}>{link.label}</Link>
           ))}
-          <Link href="/login" onClick={() => setIsOpen(false)}>Login</Link>
-          <Link href="/signup" onClick={() => setIsOpen(false)}>Signup</Link>
+
+          <div className={styles.mobileActions}>
+            <button
+              className={styles.themeToggle}
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+            </button>
+
+            {isAuthenticated ? (
+              <button
+                className={styles.mobileAuthBtn}
+                onClick={() => { void logout(); setIsOpen(false); }}
+              >
+                <LogOut size={16} />
+                <span>{user?.name || 'Logout'}</span>
+              </button>
+            ) : (
+              <>
+                <Link href="/login" className={styles.mobileAuthBtn} onClick={() => setIsOpen(false)}>Login</Link>
+                <Link href="/signup" className={styles.mobileAuthBtn} onClick={() => setIsOpen(false)}>Signup</Link>
+              </>
+            )}
+          </div>
         </nav>
       )}
     </header>
