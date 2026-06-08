@@ -104,33 +104,48 @@ export async function getNearbyReports(lng: number, lat: number, radius: number,
 }
 
 interface HeatmapInput {
-  swLng?: number;
-  swLat?: number;
-  neLng?: number;
-  neLat?: number;
-  hour?: number;
-  minIntensity: number;
-  maxIntensity: number;
-  limit: number;
+  swLng?: number | string;
+  swLat?: number | string;
+  neLng?: number | string;
+  neLat?: number | string;
+  hour?: number | string;
+  minIntensity?: number | string;
+  maxIntensity?: number | string;
+  limit?: number | string;
 }
 
+const toNumber = (value: number | string | undefined, fallback: number) => {
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
 export async function getHeatmapReports(input: HeatmapInput) {
+  const swLng = input.swLng === undefined ? undefined : toNumber(input.swLng, 0);
+  const swLat = input.swLat === undefined ? undefined : toNumber(input.swLat, 0);
+  const neLng = input.neLng === undefined ? undefined : toNumber(input.neLng, 0);
+  const neLat = input.neLat === undefined ? undefined : toNumber(input.neLat, 0);
+  const hour = input.hour === undefined ? undefined : toNumber(input.hour, 0);
+  const minIntensity = toNumber(input.minIntensity, 1);
+  const maxIntensity = toNumber(input.maxIntensity, 10);
+  const limit = toNumber(input.limit, 700);
+
   const match: Record<string, unknown> = {
-    intensity: { $gte: input.minIntensity, $lte: input.maxIntensity },
+    intensity: { $gte: minIntensity, $lte: maxIntensity },
     status: 'active',
   };
 
   if (
-    input.swLng !== undefined &&
-    input.swLat !== undefined &&
-    input.neLng !== undefined &&
-    input.neLat !== undefined
+    swLng !== undefined &&
+    swLat !== undefined &&
+    neLng !== undefined &&
+    neLat !== undefined
   ) {
     match.location = {
       $geoWithin: {
         $box: [
-          [input.swLng, input.swLat],
-          [input.neLng, input.neLat],
+          [swLng, swLat],
+          [neLng, neLat],
         ],
       },
     };
@@ -140,17 +155,17 @@ export async function getHeatmapReports(input: HeatmapInput) {
     { $match: match },
   ];
 
-  if (input.hour !== undefined) {
+  if (hour !== undefined) {
     pipeline.push({
       $match: {
-        $expr: { $eq: [{ $hour: '$occurredAt' }, input.hour] },
+        $expr: { $eq: [{ $hour: '$occurredAt' }, hour] },
       },
     });
   }
 
   pipeline.push(
     { $sort: { createdAt: -1 } },
-    { $limit: input.limit },
+    { $limit: limit },
     {
       $project: {
         _id: 1,
