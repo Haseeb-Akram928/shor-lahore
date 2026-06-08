@@ -72,3 +72,42 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
 }
+
+export type AnalyticsPeriod = '7d' | '30d' | '90d' | '1y' | 'all';
+
+export interface OverviewStats {
+  totalReports: number;
+  totalReportsChange: number;
+  activeToday: number;
+  avgIntensity: number;
+  avgIntensityChange: number;
+  topNoiseType: {
+    type: NoiseType;
+    count: number;
+  };
+  totalUsers: number;
+  totalDistricts: number;
+}
+
+export interface TrendPoint {
+  date: string;
+  count: number;
+}
+
+export interface NoiseTypeBreakdown {
+  type: NoiseType;
+  count: number;
+  percentage: number;
+}
+
+export interface HourlyStats {
+  hour: number;
+  count: number;
+  avgIntensity: number;
+}
+
+export type PopulatedReportUser = Pick<User, '_id' | 'name' | 'avatar'>;
+
+export type RecentReport = Omit<NoiseReport, 'user'> & {
+  user: PopulatedReportUser | string;
+};
