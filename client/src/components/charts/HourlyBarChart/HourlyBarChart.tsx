@@ -21,6 +21,26 @@ interface HourlyBarChartProps {
   error?: string | null;
 }
 
+interface HourlyTooltipProps {
+  active?: boolean;
+  payload?: Array<{ payload: HourlyStats }>;
+  label?: string | number;
+}
+
+function HourlyTooltip({ active, payload, label }: HourlyTooltipProps) {
+  if (!active || !payload?.length) return null;
+
+  const stats = payload[0].payload as HourlyStats;
+
+  return (
+    <div className={styles.tooltip}>
+      <strong>{formatHour(Number(label))}</strong>
+      <span>Reports: {stats.count}</span>
+      <span>Avg intensity: {stats.avgIntensity.toFixed(1)}</span>
+    </div>
+  );
+}
+
 export function HourlyBarChart({ data, isLoading = false, error = null }: HourlyBarChartProps) {
   const hasData = data.some((item) => item.count > 0);
 
@@ -47,22 +67,7 @@ export function HourlyBarChart({ data, isLoading = false, error = null }: Hourly
                 axisLine={false}
               />
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-              <Tooltip
-                labelFormatter={(hour) => formatHour(Number(hour))}
-                formatter={(value, name, item) => {
-                  if (name === 'count') return [value, 'Reports'];
-                  return [
-                    (item.payload as HourlyStats).avgIntensity.toFixed(1),
-                    'Avg intensity',
-                  ];
-                }}
-                contentStyle={{
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius)',
-                  color: 'var(--text)',
-                }}
-              />
+              <Tooltip content={<HourlyTooltip />} cursor={{ fill: 'color-mix(in srgb, var(--brand) 8%, transparent)' }} />
               <Bar dataKey="count" radius={[5, 5, 0, 0]}>
                 {data.map((item) => (
                   <Cell key={item.hour} fill={item.avgIntensity ? getIntensityColor(item.avgIntensity) : 'var(--border-strong)'} />

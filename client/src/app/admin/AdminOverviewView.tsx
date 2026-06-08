@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Activity, BarChart3, Clock3, Radio, Volume2 } from 'lucide-react';
+import { Activity, BarChart3, Radio, Volume2 } from 'lucide-react';
 import { HourlyBarChart } from '@/components/charts/HourlyBarChart/HourlyBarChart';
 import { LiveFeed } from '@/components/admin/LiveFeed/LiveFeed';
 import { NoiseTypePieChart } from '@/components/charts/NoiseTypePieChart/NoiseTypePieChart';
@@ -177,11 +177,6 @@ export function AdminOverviewView() {
         <NoiseTypePieChart data={data.byType} isLoading={isLoading} error={chartError} />
         <HourlyBarChart data={data.byHour} isLoading={isLoading} error={chartError} />
         <LiveFeed reports={data.recent} isLoading={isLoading} error={chartError} />
-      </div>
-
-      <div className={styles.nextBlock}>
-        <Clock3 size={18} aria-hidden="true" />
-        <span>Mini map and deep-dive analytics pages are next in Phase 5.</span>
       </div>
     </section>
   );

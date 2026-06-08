@@ -30,6 +30,30 @@
   margin-top: 14px;
 }
 
+.tooltip {
+  min-width: 156px;
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.tooltip strong {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.tooltip span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 @media (max-width: 420px) {
   .chart,
   .state {

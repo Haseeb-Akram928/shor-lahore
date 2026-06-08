@@ -117,23 +117,6 @@
   grid-column: 1 / -1;
 }
 
-.nextBlock {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  color: var(--text-muted);
-  background: color-mix(in srgb, var(--surface) 50%, transparent);
-  font-size: 0.92rem;
-}
-
-.nextBlock svg {
-  color: var(--brand);
-  flex: 0 0 auto;
-}
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
