@@ -10,6 +10,8 @@ The project lets residents report local noise by type, intensity, time, and loca
 - Lahore district mapping using geospatial queries
 - District API for listing districts, creating admin-managed districts, and fetching reports inside district boundaries
 - Analytics API for overview KPIs, trends, noise type breakdowns, district stats, hourly distribution, heatmap grids, top reporters, and recent reports
+- Admin report management API for filtering reports, updating report status, and deleting reports
+- Admin user management API for searching users, changing roles, and activating or deactivating accounts
 - Seed script that generates Lahore-focused mock data for development and demos
 - JWT authentication with httpOnly cookies
 - MongoDB `2dsphere` indexes for location-based reports
@@ -18,6 +20,9 @@ The project lets residents report local noise by type, intensity, time, and loca
 - Interactive Lahore noise map with MapLibre and deck.gl heatmap rendering
 - Noise report submission flow with map-based location picking
 - Public districts page with loading, empty, and error states
+- Protected admin dashboard with overview KPIs, trend charts, noise type donut chart, hourly profile, and live report feed
+- Admin analytics deep-dive page with district-hour intensity matrix, peak-hour radar, trend chart, hourly bar chart, and district ranking
+- Admin report, user, and district management pages with filters, responsive tables, status controls, and role/access controls
 - Backend integration tests using Vitest, Supertest, and MongoDB Memory Server
 - GitHub Actions workflow for automated build and test checks
 - Next.js frontend foundation with responsive layout, auth pages, UI primitives, and theme/auth providers
@@ -38,24 +43,34 @@ The project lets residents report local noise by type, intensity, time, and loca
 
 ## Current Status
 
-Phase 4 is complete.
+Phase 5 is implemented.
 
 Implemented backend work:
 
 - Phase 1 backend foundation
 - District API
 - Analytics API
+- Admin report management API
+- Admin user management API
 - Seed data engine
 - GitHub Actions backend CI
-- Backend integration tests for health, districts, analytics, and seed data
+- Backend integration tests for health, districts, analytics, report heatmap data, admin management, and seed data
 - Frontend foundation with app shell, homepage, login/signup pages, admin shell, UI primitives, API client, Socket.io client, and theme/auth contexts
 - Phase 4 public pages: interactive map, heatmap overlay, time/intensity filters, report form, and districts view
+- Phase 5 admin pages: overview dashboard, analytics deep dive, report management, user management, and district management
 
 Seed data includes:
 
 - 10 Lahore districts
 - 25 mock users
 - 900 mock noise reports
+
+Seeded admin account:
+
+```text
+Email: admin@shorlahore.com
+Password: Admin@123456
+```
 
 ## Project Structure
 
@@ -138,6 +153,16 @@ JWT_SECRET=your_32_character_minimum_secret
 CLIENT_URL=http://localhost:3000
 ```
 
+### Seed Development Data
+
+After configuring `server/.env`, seed the database:
+
+```bash
+npm run seed --prefix server
+```
+
+The seed script resets users, districts, and reports, then creates the Lahore demo dataset and the default admin account.
+
 ## Running the Backend
 
 ```bash
@@ -156,6 +181,31 @@ Health check:
 GET /api/health
 ```
 
+## Running the Frontend
+
+```bash
+npm run dev --prefix client
+```
+
+The frontend runs on:
+
+```text
+http://localhost:3000
+```
+
+Useful routes:
+
+```text
+/map
+/report
+/districts
+/admin
+/admin/analytics
+/admin/reports
+/admin/users
+/admin/districts
+```
+
 ## Testing
 
 Run backend tests:
@@ -166,7 +216,7 @@ npm run test --prefix server
 
 Tests run against MongoDB Memory Server and do not touch the development database.
 
-Current backend coverage includes health, district routes, analytics routes, role protection, seed data integrity, and selected edge cases.
+Current backend coverage includes health, district routes, analytics routes, report heatmap routes, admin report/user management routes, role protection, seed data integrity, and selected edge cases.
 
 ## Build
 

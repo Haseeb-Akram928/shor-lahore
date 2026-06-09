@@ -24,6 +24,8 @@ export interface User {
   avatar?: string;
   reportsCount: number;
   reputation: number;
+  isActive?: boolean;
+  createdAt?: string;
 }
 
 export interface GeoJSONPoint {
@@ -65,12 +67,22 @@ export interface District {
   city: string;
   avgNoiseLevel: number;
   totalReports: number;
+  createdAt?: string;
 }
 
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message?: string;
+}
+
+export interface PaginatedApiResponse<T> extends ApiResponse<T[]> {
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
 
 export type AnalyticsPeriod = '7d' | '30d' | '90d' | '1y' | 'all';
@@ -106,8 +118,27 @@ export interface HourlyStats {
   avgIntensity: number;
 }
 
-export type PopulatedReportUser = Pick<User, '_id' | 'name' | 'avatar'>;
+export interface DistrictStats {
+  district: string;
+  totalReports: number;
+  avgIntensity: number;
+  topNoiseType: NoiseType;
+}
+
+export interface HeatmapGridCell {
+  district: string;
+  hour: number;
+  avgIntensity: number;
+}
+
+export type PopulatedReportUser = Pick<User, '_id' | 'name' | 'avatar'> & {
+  email?: string;
+};
 
 export type RecentReport = Omit<NoiseReport, 'user'> & {
   user: PopulatedReportUser | string;
+};
+
+export type AdminUser = Required<Pick<User, '_id' | 'name' | 'email' | 'role' | 'reportsCount' | 'reputation' | 'isActive' | 'createdAt'>> & {
+  avatar?: string;
 };

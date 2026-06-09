@@ -52,6 +52,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
       <Map
         initialViewState={{ ...LAHORE_CENTER, zoom: 11.5 }}
         mapStyle={MAP_STYLE}
+        style={{ width: '100%', height: '100%' }}
         onClick={(event) => onChange([event.lngLat.lng, event.lngLat.lat])}
         minZoom={9}
         maxZoom={17}

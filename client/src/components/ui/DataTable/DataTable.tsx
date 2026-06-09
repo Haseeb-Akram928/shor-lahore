@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import styles from './DataTable.module.css';
 
 export interface DataTableColumn<T> {
@@ -13,9 +13,19 @@ interface DataTableProps<T> {
   getRowKey: (row: T) => string;
   isLoading?: boolean;
   emptyMessage?: string;
+  minWidth?: CSSProperties['minWidth'];
+  tableLayout?: CSSProperties['tableLayout'];
 }
 
-export function DataTable<T>({ columns, rows, getRowKey, isLoading = false, emptyMessage = 'No records found' }: DataTableProps<T>) {
+export function DataTable<T>({
+  columns,
+  rows,
+  getRowKey,
+  isLoading = false,
+  emptyMessage = 'No records found',
+  minWidth,
+  tableLayout,
+}: DataTableProps<T>) {
   if (isLoading) {
     return <div className={styles.state}>Loading records...</div>;
   }
@@ -26,7 +36,7 @@ export function DataTable<T>({ columns, rows, getRowKey, isLoading = false, empt
 
   return (
     <div className={styles.wrapper}>
-      <table className={styles.table}>
+      <table className={styles.table} style={{ ...(minWidth ? { minWidth } : {}), ...(tableLayout ? { tableLayout } : {}) }}>
         <thead>
           <tr>
             {columns.map((column) => <th key={column.key}>{column.header}</th>)}

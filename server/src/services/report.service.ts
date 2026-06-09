@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { District } from '../models/District.model.js';
 import { NoiseReport } from '../models/NoiseReport.model.js';
 import { User } from '../models/User.model.js';
-import type { NoiseType } from '../types/index.js';
+import type { NoiseType, ReportStatus } from '../types/index.js';
 import { ApiError } from '../utils/ApiError.js';
 
 interface CreateReportInput {
@@ -77,6 +77,50 @@ export async function getRecentReports(limit: number) {
     .sort({ createdAt: -1 })
     .limit(limit)
     .populate('user', 'name avatar');
+}
+
+interface AdminReportListInput {
+  page: number;
+  limit: number;
+  noiseType?: NoiseType;
+  status?: ReportStatus;
+  district?: string;
+  minIntensity?: number;
+  maxIntensity?: number;
+}
+
+export async function listAdminReports(input: AdminReportListInput) {
+  const filter: Record<string, unknown> = {};
+
+  if (input.noiseType) filter.noiseType = input.noiseType;
+  if (input.status) filter.status = input.status;
+  if (input.district) filter.district = input.district;
+  if (input.minIntensity !== undefined || input.maxIntensity !== undefined) {
+    filter.intensity = {
+      ...(input.minIntensity !== undefined && { $gte: input.minIntensity }),
+      ...(input.maxIntensity !== undefined && { $lte: input.maxIntensity }),
+    };
+  }
+
+  const skip = (input.page - 1) * input.limit;
+  const [reports, total] = await Promise.all([
+    NoiseReport.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(input.limit)
+      .populate('user', 'name email avatar'),
+    NoiseReport.countDocuments(filter),
+  ]);
+
+  return {
+    reports,
+    pagination: {
+      page: input.page,
+      limit: input.limit,
+      total,
+      pages: Math.ceil(total / input.limit),
+    },
+  };
 }
 
 export async function getNearbyReports(lng: number, lat: number, radius: number, limit: number) {
@@ -200,4 +244,33 @@ export async function upvoteReport(reportId: string, userId: string) {
   await report.save();
 
   return report;
+}
+
+export async function updateReportStatus(reportId: string, status: ReportStatus) {
+  if (!mongoose.Types.ObjectId.isValid(reportId)) {
+    throw ApiError.badRequest('Invalid report ID');
+  }
+
+  const report = await NoiseReport.findByIdAndUpdate(
+    reportId,
+    { status },
+    { new: true, runValidators: true }
+  ).populate('user', 'name email avatar');
+
+  if (!report) {
+    throw ApiError.notFound('Report not found');
+  }
+
+  return report;
+}
+
+export async function deleteReport(reportId: string) {
+  if (!mongoose.Types.ObjectId.isValid(reportId)) {
+    throw ApiError.badRequest('Invalid report ID');
+  }
+
+  const report = await NoiseReport.findByIdAndDelete(reportId);
+  if (!report) {
+    throw ApiError.notFound('Report not found');
+  }
 }
