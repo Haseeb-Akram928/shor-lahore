@@ -36,6 +36,24 @@ export const getRecentReports = catchAsync(async (req: Request, res: Response) =
   });
 });
 
+export const listAdminReports = catchAsync(async (req: Request, res: Response) => {
+  const result = await reportService.listAdminReports({
+    page: req.query.page as unknown as number,
+    limit: req.query.limit as unknown as number,
+    noiseType: req.query.noiseType as never,
+    status: req.query.status as never,
+    district: req.query.district as string | undefined,
+    minIntensity: req.query.minIntensity as unknown as number | undefined,
+    maxIntensity: req.query.maxIntensity as unknown as number | undefined,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: result.reports,
+    pagination: result.pagination,
+  });
+});
+
 export const getNearbyReports = catchAsync(async (req: Request, res: Response) => {
   const reports = await reportService.getNearbyReports(
     req.query.lng as unknown as number,
@@ -73,5 +91,21 @@ export const upvoteReport = catchAsync(async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     data: { report },
+  });
+});
+
+export const updateReportStatus = catchAsync(async (req: Request, res: Response) => {
+  const report = await reportService.updateReportStatus(String(req.params.id), req.body.status);
+  res.status(200).json({
+    success: true,
+    data: { report },
+  });
+});
+
+export const deleteReport = catchAsync(async (req: Request, res: Response) => {
+  await reportService.deleteReport(String(req.params.id));
+  res.status(200).json({
+    success: true,
+    data: {},
   });
 });

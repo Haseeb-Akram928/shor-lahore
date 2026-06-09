@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NOISE_TYPES } from '../types/index.js';
+import { NOISE_TYPES, REPORT_STATUSES } from '../types/index.js';
 
 const longitude = z.coerce.number().min(73.8).max(74.8);
 const latitude = z.coerce.number().min(31.2).max(31.8);
@@ -54,4 +54,30 @@ export const nearbyQuerySchema = z.object({
 
 export const recentQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+});
+
+export const adminReportQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+  noiseType: z.enum(NOISE_TYPES).optional(),
+  status: z.enum(REPORT_STATUSES).optional(),
+  district: z.string().trim().min(1).max(80).optional(),
+  minIntensity: z.coerce.number().int().min(1).max(10).optional(),
+  maxIntensity: z.coerce.number().int().min(1).max(10).optional(),
+}).superRefine((query, ctx) => {
+  if (
+    query.minIntensity !== undefined &&
+    query.maxIntensity !== undefined &&
+    query.minIntensity > query.maxIntensity
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'minIntensity cannot be greater than maxIntensity',
+      path: ['minIntensity'],
+    });
+  }
+});
+
+export const updateReportStatusSchema = z.object({
+  status: z.enum(REPORT_STATUSES),
 });
