@@ -35,7 +35,7 @@ export function DistrictsView() {
         <div className={styles.header}>
           <Badge tone="brand">District intelligence</Badge>
           <h1>Lahore districts</h1>
-          <p>Compare seeded district profiles by report volume and average intensity.</p>
+          <p>See how noise patterns differ across Lahore, from report volume to average intensity.</p>
         </div>
 
         {error && (

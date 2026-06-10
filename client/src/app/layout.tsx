@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { ToastProvider } from '@/context/ToastContext';
 import { Navbar } from '@/components/layout/Navbar/Navbar';
 import { Footer } from '@/components/layout/Footer/Footer';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -24,11 +25,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <ThemeProvider>
           <AuthProvider>
-            <div className="app-shell">
-              <Navbar />
-              <main className="main-content">{children}</main>
-              <Footer />
-            </div>
+            <ToastProvider>
+              <div className="app-shell">
+                <Navbar />
+                <main className="main-content">{children}</main>
+                <Footer />
+              </div>
+            </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

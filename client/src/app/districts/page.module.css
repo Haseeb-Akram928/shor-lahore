@@ -87,8 +87,26 @@
 }
 
 @media (max-width: 520px) {
+  .header {
+    margin-inline: auto;
+    text-align: center;
+  }
+
   .grid,
   .stats {
     grid-template-columns: 1fr;
+  }
+
+  .card {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .cardTop {
+    justify-content: center;
+  }
+
+  .stats span {
+    justify-items: center;
   }
 }

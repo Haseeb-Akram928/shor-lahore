@@ -9,9 +9,10 @@ import styles from './TimeSlider.module.css';
 interface TimeSliderProps {
   hour: number | null;
   onChange: (hour: number | null) => void;
+  isLoading?: boolean;
 }
 
-export function TimeSlider({ hour, onChange }: TimeSliderProps) {
+export function TimeSlider({ hour, onChange, isLoading = false }: TimeSliderProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const activeHour = hour ?? 12;
 
@@ -31,7 +32,9 @@ export function TimeSlider({ hour, onChange }: TimeSliderProps) {
         </Button>
         <div className={styles.readout}>
           <strong>{hour === null ? 'All hours' : formatHour(activeHour)}</strong>
-          <span>{hour === null ? 'Aggregated reports' : 'Hourly heatmap filter'}</span>
+          <span className={isLoading ? styles.syncing : undefined}>
+            {isLoading ? 'Syncing heatmap layer' : hour === null ? 'Aggregated reports' : 'Hourly heatmap filter'}
+          </span>
         </div>
         <Button variant="ghost" onClick={() => onChange(null)} aria-label="Reset time filter">
           <RotateCcw size={16} />
