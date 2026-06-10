@@ -31,6 +31,10 @@
   font-size: 0.8rem;
 }
 
+.syncing {
+  color: var(--brand) !important;
+}
+
 .sliderPanel input {
   width: 100%;
   accent-color: var(--brand);

@@ -13,6 +13,7 @@ import { LocationPicker } from '@/components/maps/LocationPicker/LocationPicker'
 import { api } from '@/lib/api';
 import { NOISE_TYPE_CONFIG } from '@/lib/constants';
 import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
 import type { ApiResponse, NoiseReport, NoiseType } from '@/types';
 import styles from './ReportForm.module.css';
 
@@ -21,6 +22,7 @@ const noiseTypes = Object.keys(NOISE_TYPE_CONFIG) as NoiseType[];
 export function ReportForm() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+  const { notify } = useToast();
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
   const [noiseType, setNoiseType] = useState<NoiseType>('traffic');
   const [intensity, setIntensity] = useState(6);
@@ -40,22 +42,42 @@ export function ReportForm() {
 
     if (!coordinates) {
       setError('Select a location on the map');
+      notify({
+        title: 'Location required',
+        description: 'Click the map or use your current location before submitting.',
+        tone: 'warning',
+      });
       return;
     }
 
     if (description.length > 500) {
       setError('Description cannot exceed 500 characters');
+      notify({
+        title: 'Description is too long',
+        description: 'Keep the report description under 500 characters.',
+        tone: 'warning',
+      });
       return;
     }
 
     const occurredAtDate = new Date(occurredAt);
     if (Number.isNaN(occurredAtDate.getTime())) {
       setError('Select a valid date and time');
+      notify({
+        title: 'Invalid date',
+        description: 'Choose a valid time for when the noise happened.',
+        tone: 'warning',
+      });
       return;
     }
 
     if (occurredAtDate > new Date()) {
       setError('Report time cannot be in the future');
+      notify({
+        title: 'Future time selected',
+        description: 'Noise reports must use a time that has already happened.',
+        tone: 'warning',
+      });
       return;
     }
 
@@ -70,9 +92,20 @@ export function ReportForm() {
         occurredAt: occurredAtDate.toISOString(),
       });
       setSuccess('Report submitted');
+      notify({
+        title: 'Report submitted',
+        description: 'Thanks. Your report is now part of the Lahore noise map.',
+        tone: 'success',
+      });
       router.push('/map');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to submit report');
+      const message = err instanceof Error ? err.message : 'Unable to submit report';
+      setError(message);
+      notify({
+        title: 'Report was not submitted',
+        description: message,
+        tone: 'error',
+      });
       setIsSubmitting(false);
     }
   };

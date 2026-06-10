@@ -1,10 +1,9 @@
 'use client';
 
 import Map, { NavigationControl, ScaleControl } from 'react-map-gl/maplibre';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/Badge/Badge';
-import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import { HeatmapOverlay } from '@/components/maps/HeatmapOverlay/HeatmapOverlay';
 import { ReportMarker } from '@/components/maps/ReportMarker/ReportMarker';
 import { TimeSlider } from '@/components/maps/TimeSlider/TimeSlider';
@@ -67,8 +66,13 @@ export function NoiseMap() {
         )}
       </aside>
 
-      <div className={styles.mapWrap}>
-        {isLoading && <Skeleton className={styles.loading} />}
+      <div className={`${styles.mapWrap} ${isLoading ? styles.mapWrapLoading : ''}`}>
+        {isLoading && (
+          <div className={styles.loadingPill} role="status" aria-live="polite">
+            <Loader2 className={styles.loadingIcon} size={16} aria-hidden="true" />
+            <span>{data.length === 0 ? 'Loading heatmap' : hour === null ? 'Refreshing heatmap' : `Syncing ${hour}:00`}</span>
+          </div>
+        )}
         <Map
           initialViewState={LAHORE_CENTER}
           mapStyle={MAP_STYLE}
@@ -83,7 +87,7 @@ export function NoiseMap() {
           {data.slice(0, 80).map((report) => <ReportMarker key={report._id} report={report} />)}
         </Map>
         <div className={styles.slider}>
-          <TimeSlider hour={hour} onChange={setHour} />
+          <TimeSlider hour={hour} onChange={setHour} isLoading={isLoading} />
         </div>
       </div>
     </section>
