@@ -56,6 +56,8 @@ export interface HeatmapPoint {
   noiseType: NoiseType;
   district?: string;
   description?: string;
+  tags?: string[];
+  user?: PopulatedReportUser | string;
   occurredAt: string;
   createdAt: string;
   upvotes: number;

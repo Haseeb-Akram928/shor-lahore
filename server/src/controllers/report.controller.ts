@@ -17,7 +17,9 @@ export const createReport = catchAsync(async (req: Request, res: Response) => {
   });
 
   try {
-    getIO().to('dashboard').emit('report-created', report);
+    const io = getIO();
+    io.to('dashboard').emit('report-created', report);
+    io.emit('map-report-created', report);
   } catch {
     // Socket.io is not initialized during isolated tests.
   }
@@ -75,6 +77,9 @@ export const getHeatmapReports = catchAsync(async (req: Request, res: Response) 
     neLng: req.query.neLng as unknown as number | undefined,
     neLat: req.query.neLat as unknown as number | undefined,
     hour: req.query.hour as unknown as number | undefined,
+    noiseTypes: req.query.noiseTypes as string | undefined,
+    from: req.query.from as unknown as Date | undefined,
+    to: req.query.to as unknown as Date | undefined,
     minIntensity: req.query.minIntensity as unknown as number,
     maxIntensity: req.query.maxIntensity as unknown as number,
     limit: req.query.limit as unknown as number,

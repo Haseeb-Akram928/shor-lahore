@@ -48,13 +48,15 @@
 }
 
 .range,
-.textarea {
+.textarea,
+.tagsField {
   display: grid;
   gap: 7px;
 }
 
 .range span,
-.textarea span {
+.textarea span,
+.tagsField span {
   font-size: 0.9rem;
   font-weight: 800;
 }
@@ -75,8 +77,54 @@
 }
 
 .textarea small,
+.tagsField small,
 .note {
   color: var(--text-muted);
+}
+
+.tagBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 7px;
+}
+
+.tagBox:focus-within {
+  box-shadow: var(--focus);
+}
+
+.tagBox button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  max-width: 100%;
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 12%, var(--surface));
+  color: var(--brand);
+  padding: 0 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.tagBox input {
+  flex: 1 1 150px;
+  min-width: 120px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 6px 4px;
+}
+
+.tagBox input:disabled {
+  cursor: not-allowed;
 }
 
 .preview {

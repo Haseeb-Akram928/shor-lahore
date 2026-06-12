@@ -153,6 +153,9 @@ interface HeatmapInput {
   neLng?: number | string;
   neLat?: number | string;
   hour?: number | string;
+  noiseTypes?: string;
+  from?: Date | string;
+  to?: Date | string;
   minIntensity?: number | string;
   maxIntensity?: number | string;
   limit?: number | string;
@@ -173,11 +176,28 @@ export async function getHeatmapReports(input: HeatmapInput) {
   const minIntensity = toNumber(input.minIntensity, 1);
   const maxIntensity = toNumber(input.maxIntensity, 10);
   const limit = toNumber(input.limit, 700);
+  const noiseTypes = input.noiseTypes
+    ?.split(',')
+    .map((type) => type.trim())
+    .filter(Boolean) as NoiseType[] | undefined;
+  const from = input.from ? new Date(input.from) : undefined;
+  const to = input.to ? new Date(input.to) : undefined;
 
   const match: Record<string, unknown> = {
     intensity: { $gte: minIntensity, $lte: maxIntensity },
     status: 'active',
   };
+
+  if (noiseTypes?.length) {
+    match.noiseType = { $in: noiseTypes };
+  }
+
+  if (from || to) {
+    match.occurredAt = {
+      ...(from && { $gte: from }),
+      ...(to && { $lte: to }),
+    };
+  }
 
   if (
     swLng !== undefined &&
@@ -211,6 +231,15 @@ export async function getHeatmapReports(input: HeatmapInput) {
     { $sort: { createdAt: -1 } },
     { $limit: limit },
     {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+    {
       $project: {
         _id: 1,
         coordinates: '$location.coordinates',
@@ -221,6 +250,12 @@ export async function getHeatmapReports(input: HeatmapInput) {
         createdAt: 1,
         description: 1,
         upvotes: 1,
+        tags: 1,
+        user: {
+          _id: '$user._id',
+          name: '$user.name',
+          avatar: '$user.avatar',
+        },
       },
     }
   );

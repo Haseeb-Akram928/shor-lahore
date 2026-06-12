@@ -21,10 +21,13 @@ export const heatmapQuerySchema = z.object({
   neLng: longitude.optional(),
   neLat: latitude.optional(),
   hour: z.coerce.number().int().min(0).max(23).optional(),
+  noiseTypes: z.string().trim().optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
   minIntensity: z.coerce.number().int().min(1).max(10).optional().default(1),
   maxIntensity: z.coerce.number().int().min(1).max(10).optional().default(10),
   limit: z.coerce.number().int().min(1).max(1000).optional().default(700),
-}).superRefine((query: { swLng?: number; swLat?: number; neLng?: number; neLat?: number; hour?: number; minIntensity: number; maxIntensity: number; limit: number }, ctx: z.RefinementCtx) => {
+}).superRefine((query: { swLng?: number; swLat?: number; neLng?: number; neLat?: number; hour?: number; noiseTypes?: string; from?: Date; to?: Date; minIntensity: number; maxIntensity: number; limit: number }, ctx: z.RefinementCtx) => {
   const bounds = [query.swLng, query.swLat, query.neLng, query.neLat];
   const providedBounds = bounds.filter((value) => value !== undefined);
 
@@ -42,6 +45,27 @@ export const heatmapQuerySchema = z.object({
       message: 'minIntensity cannot be greater than maxIntensity',
       path: ['minIntensity'],
     });
+  }
+
+  if (query.from && query.to && query.from > query.to) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'from cannot be later than to',
+      path: ['from'],
+    });
+  }
+
+  if (query.noiseTypes) {
+    const requestedTypes = query.noiseTypes.split(',').map((type) => type.trim()).filter(Boolean);
+    const invalidType = requestedTypes.find((type) => !NOISE_TYPES.includes(type as never));
+
+    if (requestedTypes.length === 0 || invalidType) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'noiseTypes must contain valid comma-separated noise types',
+        path: ['noiseTypes'],
+      });
+    }
   }
 });
 
