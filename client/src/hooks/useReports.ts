@@ -5,7 +5,14 @@ import { api } from '@/lib/api';
 import type { ApiResponse, HeatmapPoint, NoiseReport } from '@/types';
 
 interface HeatmapParams {
+  swLng?: number;
+  swLat?: number;
+  neLng?: number;
+  neLat?: number;
   hour?: number;
+  noiseTypes?: string;
+  from?: string;
+  to?: string;
   minIntensity?: number;
   maxIntensity?: number;
   limit?: number;

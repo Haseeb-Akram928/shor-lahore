@@ -1,9 +1,9 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, KeyboardEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, X } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
 import { Card } from '@/components/ui/Card/Card';
@@ -27,6 +27,8 @@ export function ReportForm() {
   const [noiseType, setNoiseType] = useState<NoiseType>('traffic');
   const [intensity, setIntensity] = useState(6);
   const [description, setDescription] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagDraft, setTagDraft] = useState('');
   const [occurredAt, setOccurredAt] = useState(() => new Date().toISOString().slice(0, 16));
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -34,6 +36,52 @@ export function ReportForm() {
 
   const selectedConfig = useMemo(() => NOISE_TYPE_CONFIG[noiseType], [noiseType]);
   const SelectedIcon = selectedConfig.icon;
+
+  const addTag = (value: string) => {
+    const normalized = value.trim().replace(/^#/, '').toLowerCase();
+    if (!normalized) return;
+
+    if (normalized.length > 32) {
+      notify({
+        title: 'Tag is too long',
+        description: 'Tags must be 32 characters or fewer.',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    if (tags.includes(normalized)) {
+      setTagDraft('');
+      return;
+    }
+
+    if (tags.length >= 10) {
+      notify({
+        title: 'Tag limit reached',
+        description: 'A report can include up to 10 tags.',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    setTags((current) => [...current, normalized]);
+    setTagDraft('');
+  };
+
+  const removeTag = (tag: string) => {
+    setTags((current) => current.filter((item) => item !== tag));
+  };
+
+  const handleTagKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      addTag(tagDraft);
+    }
+
+    if (event.key === 'Backspace' && !tagDraft && tags.length > 0) {
+      removeTag(tags[tags.length - 1]);
+    }
+  };
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -89,6 +137,7 @@ export function ReportForm() {
         noiseType,
         intensity,
         description,
+        tags,
         occurredAt: occurredAtDate.toISOString(),
       });
       setSuccess('Report submitted');
@@ -178,11 +227,33 @@ export function ReportForm() {
           <small>{description.length}/500</small>
         </label>
 
+        <label className={styles.tagsField}>
+          <span>Tags</span>
+          <div className={styles.tagBox}>
+            {tags.map((tag) => (
+              <button key={tag} type="button" onClick={() => removeTag(tag)} aria-label={`Remove ${tag} tag`}>
+                #{tag}
+                <X size={13} aria-hidden="true" />
+              </button>
+            ))}
+            <input
+              value={tagDraft}
+              onChange={(event) => setTagDraft(event.target.value)}
+              onKeyDown={handleTagKeyDown}
+              onBlur={() => addTag(tagDraft)}
+              placeholder={tags.length === 0 ? 'late-night, recurring...' : 'Add tag'}
+              maxLength={32}
+              disabled={tags.length >= 10}
+            />
+          </div>
+          <small>{tags.length}/10 tags</small>
+        </label>
+
         <div className={styles.preview}>
           <SelectedIcon size={20} />
           <div>
             <strong>{selectedConfig.label}</strong>
-            <span>Intensity {intensity}/10</span>
+            <span>Intensity {intensity}/10{tags.length ? ` - ${tags.map((tag) => `#${tag}`).join(' ')}` : ''}</span>
           </div>
         </div>
 

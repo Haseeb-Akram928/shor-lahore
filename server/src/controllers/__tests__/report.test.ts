@@ -27,6 +27,7 @@ describe('Report Integration Tests', () => {
 
   const createReport = async (overrides: Partial<{
     intensity: number;
+    noiseType: 'traffic' | 'construction' | 'nightlife';
     status: 'active' | 'resolved' | 'flagged';
     occurredAt: Date;
     coordinates: [number, number];
@@ -39,7 +40,7 @@ describe('Report Integration Tests', () => {
         type: 'Point',
         coordinates: overrides.coordinates || [74.3478, 31.5378],
       },
-      noiseType: 'traffic',
+      noiseType: overrides.noiseType || 'traffic',
       intensity: overrides.intensity ?? 7,
       district: 'Gulberg',
       status: overrides.status || 'active',
@@ -71,12 +72,43 @@ describe('Report Integration Tests', () => {
       expect(response.body.data[0].intensity).toBe(8);
     });
 
+    it('should filter reports by noise type and occurrence date range', async () => {
+      const inRange = pastDateAtUtcHour(8);
+      const outOfRange = new Date(inRange);
+      outOfRange.setUTCDate(outOfRange.getUTCDate() - 20);
+
+      await createReport({ noiseType: 'traffic', occurredAt: inRange });
+      await createReport({ noiseType: 'construction', occurredAt: inRange });
+      await createReport({ noiseType: 'traffic', occurredAt: outOfRange });
+
+      const from = new Date(inRange);
+      from.setUTCDate(from.getUTCDate() - 1);
+      const to = new Date(inRange);
+      to.setUTCDate(to.getUTCDate() + 1);
+
+      const response = await request(app).get(
+        `/api/reports/heatmap?noiseTypes=traffic&from=${from.toISOString()}&to=${to.toISOString()}`
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].noiseType).toBe('traffic');
+    });
+
     it('should reject partial viewport bounds with a validation error', async () => {
       const response = await request(app).get('/api/reports/heatmap?swLng=74.2');
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
       expect(response.body.message).toContain('Viewport bounds require');
+    });
+
+    it('should reject invalid noise type filters', async () => {
+      const response = await request(app).get('/api/reports/heatmap?noiseTypes=traffic,invalid');
+
+      expect(response.status).toBe(400);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('noiseTypes');
     });
   });
 });
