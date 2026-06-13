@@ -11,15 +11,22 @@ import styles from './Navbar.module.css';
 const links = [
   { href: '/', label: 'Home' },
   { href: '/map', label: 'Map' },
+  { href: '/insights', label: 'Insights' },
+  { href: '/compare', label: 'Compare' },
+  { href: '/quiet-finder', label: 'Quiet Finder' },
   { href: '/report', label: 'Report' },
   { href: '/districts', label: 'Areas' },
-  { href: '/admin', label: 'Admin' },
 ];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, isAdmin, user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const visibleLinks = [
+    ...links,
+    ...(isAuthenticated ? [{ href: '/me', label: 'My Impact' }] : []),
+    ...(isAdmin ? [{ href: '/admin', label: 'Admin' }] : []),
+  ];
 
   return (
     <header className={styles.header}>
@@ -30,7 +37,7 @@ export function Navbar() {
         </Link>
 
         <nav className={styles.nav} aria-label="Main navigation">
-          {links.map((link) => <Link key={link.href} href={link.href}>{link.label}</Link>)}
+          {visibleLinks.map((link) => <Link key={link.href} href={link.href}>{link.label}</Link>)}
         </nav>
 
         <div className={styles.actions}>
@@ -54,7 +61,7 @@ export function Navbar() {
 
       {isOpen && (
         <nav className={styles.mobileNav} aria-label="Mobile navigation">
-          {links.map((link) => (
+          {visibleLinks.map((link) => (
             <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)}>{link.label}</Link>
           ))}
 

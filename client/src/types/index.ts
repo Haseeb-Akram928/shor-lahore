@@ -139,6 +139,71 @@ export interface HeatmapGridCell {
   avgIntensity: number;
 }
 
+export interface AreaScorecard {
+  district: District;
+  totalReports: number;
+  avgIntensity: number;
+  quietScore: number;
+  topNoiseType: NoiseType | null;
+  peakHour: number | null;
+  quietestHour: number | null;
+  lahoreAvgIntensity: number;
+  comparisonToLahore: number;
+  hourly: HourlyStats[];
+  byType: NoiseTypeBreakdown[];
+  recentReports: RecentReport[];
+}
+
+export interface PublicInsights {
+  overview: OverviewStats;
+  trends: TrendPoint[];
+  byType: NoiseTypeBreakdown[];
+  byHour: HourlyStats[];
+  byDistrict: DistrictStats[];
+  heatmapGrid: HeatmapGridCell[];
+  recentReports: RecentReport[];
+}
+
+export interface AreaComparisonItem {
+  district: District;
+  totalReports: number;
+  avgIntensity: number;
+  quietScore: number;
+  topNoiseType: NoiseType | null;
+  peakHour: number | null;
+  quietestHour: number | null;
+  hourly: HourlyStats[];
+  byType: NoiseTypeBreakdown[];
+}
+
+export interface AreaComparison {
+  areas: AreaComparisonItem[];
+}
+
+export type QuietFinderTimeWindow = 'any' | 'morning' | 'afternoon' | 'evening' | 'night';
+
+export interface QuietFinderResult {
+  district: District;
+  quietScore: number;
+  expectedIntensity: number;
+  totalReports: number;
+  bestHour: number | null;
+  avoidedTypeCount: number;
+}
+
+export interface QuietFinderResponse {
+  results: QuietFinderResult[];
+}
+
+export interface MyImpact {
+  user: User;
+  totalReports: number;
+  totalUpvotes: number;
+  areasContributed: number;
+  byType: NoiseTypeBreakdown[];
+  recentReports: RecentReport[];
+}
+
 export type PopulatedReportUser = Pick<User, '_id' | 'name' | 'avatar'> & {
   email?: string;
 };

@@ -13,6 +13,7 @@ import reportRoutes from './routes/report.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import districtRoutes from './routes/district.routes.js';
 import userRoutes from './routes/user.routes.js';
+import publicRoutes from './routes/public.routes.js';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/districts', districtRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/public', publicRoutes);
 
 // ============ 404 HANDLER ============
 app.use((req, res) => {
