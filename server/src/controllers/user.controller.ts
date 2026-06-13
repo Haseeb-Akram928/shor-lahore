@@ -26,3 +26,12 @@ export const updateAdminUser = catchAsync(async (req: Request, res: Response) =>
     data: { user },
   });
 });
+
+export const getMyImpact = catchAsync(async (req: Request, res: Response) => {
+  const data = await userService.getMyImpact(req.user!._id);
+
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});

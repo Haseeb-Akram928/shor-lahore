@@ -47,6 +47,69 @@
   font-size: 1.45rem;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.scoreCard {
+  display: grid;
+  gap: 8px;
+  min-height: 128px;
+}
+
+.scoreCard svg {
+  color: var(--brand);
+}
+
+.scoreCard strong {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.scoreCard span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.insightStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.insightStrip span {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  color: var(--text-muted);
+  padding: 12px 14px;
+  font-weight: 800;
+}
+
+.insightStrip strong {
+  color: var(--text);
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -159,6 +222,16 @@
     display: grid;
   }
 
+  .scoreGrid,
+  .insightStrip,
+  .chartGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chartGrid {
+    grid-template-columns: 1fr;
+  }
+
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -172,6 +245,8 @@
   }
 
   .summary,
+  .scoreGrid,
+  .insightStrip,
   .grid {
     grid-template-columns: 1fr;
   }

@@ -20,6 +20,7 @@ The project lets residents report local noise by type, intensity, time, and loca
 - Interactive Lahore noise map with MapLibre and deck.gl heatmap rendering
 - Noise report submission flow with map-based location picking
 - Public areas page with area detail drill-downs, paginated area reports, loading, empty, and error states
+- Public exploration layer with city insights, area scorecards, area comparison, quiet finder, and personal contribution impact
 - Protected admin dashboard with overview KPIs, trend charts, compact recent-report map, noise type donut chart, hourly profile, and live report feed
 - Admin analytics deep-dive page with area-hour intensity matrix, noise type breakdown, peak-hour radar, trend chart, hourly bar chart, and area ranking
 - Admin report, user, and area management pages with filters, responsive tables, bulk report moderation, status controls, role/access controls, and area creation
@@ -199,8 +200,12 @@ Useful routes:
 ```text
 /map
 /report
+/insights
+/compare
+/quiet-finder
 /districts
 /districts/:id
+/me
 /admin
 /admin/analytics
 /admin/reports

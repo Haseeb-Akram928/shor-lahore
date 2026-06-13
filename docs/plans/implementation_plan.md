@@ -118,6 +118,7 @@ shor-lahore/                       ← Single GitHub Repository
 graph TB
     subgraph Client["Next.js 15 — client/ (port 3000)"]
         A["Public Pages<br/>(Landing, Map, Report, Districts)"]
+        P["Public Exploration<br/>(Insights, Compare, Quiet Finder, Area Scorecards)"]
         B["Admin Dashboard<br/>(KPI Cards, Charts, Tables)"]
         C["Auth Pages<br/>(Login, Signup)"]
     end
@@ -136,6 +137,7 @@ graph TB
     end
 
     A -->|"HTTP + JWT Cookie"| D
+    P -->|"Public aggregate APIs"| D
     B -->|"HTTP + JWT Cookie"| D
     C -->|"HTTP + JWT Cookie"| D
     A <-->|"WebSocket"| E
@@ -147,6 +149,79 @@ graph TB
     D --> I
     D --> J
 ```
+
+---
+
+## Public Exploration Layer Update
+
+This update expands the normal user experience beyond viewing the map, browsing areas, and submitting reports. Admin analytics remain protected under `/api/analytics`; public exploration uses separate aggregate-only routes under `/api/public`.
+
+### Backend Additions
+
+New backend files:
+
+```text
+server/src/controllers/public.controller.ts
+server/src/routes/public.routes.ts
+server/src/services/public.service.ts
+server/src/validators/public.validator.ts
+server/src/controllers/__tests__/public-exploration.test.ts
+```
+
+New public-safe endpoints:
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/public/insights?period=7d\|30d\|90d\|1y\|all` | Public city-wide KPIs, trends, noise mix, hourly profile, area ranking, area-hour matrix, and recent reports |
+| `GET` | `/api/public/areas/:id/scorecard?period=7d\|30d\|90d\|1y\|all` | Public area scorecard with quiet score, peak hour, quietest hour, top source, Lahore comparison, charts, and recent reports |
+| `GET` | `/api/public/compare?districtIds=id1,id2,id3&period=...` | Compare 2-3 mapped areas, or default to the top two highest-report areas |
+| `GET` | `/api/public/quiet-finder?period=...&timeWindow=any\|morning\|afternoon\|evening\|night&avoidType=NoiseType&maxIntensity=1-10` | Rank areas by expected quietness for selected filters |
+| `GET` | `/api/users/me/impact` | Authenticated current-user contribution summary |
+
+Public endpoints must:
+- Use active reports for public analytics.
+- Return aggregate or public-safe report data only.
+- Avoid exposing user emails, admin moderation state, inactive-user controls, or admin-only data.
+- Keep `/api/analytics/*` protected by `protect` + `restrictTo('admin')`.
+
+### Frontend Additions
+
+New public routes:
+
+```text
+/insights
+/compare
+/quiet-finder
+/me
+```
+
+Updated route:
+
+```text
+/districts/[id]
+```
+
+Public UX additions:
+- `/insights`: city-wide public analytics using existing chart components.
+- `/compare`: selectable area comparison with quiet score, average intensity, top source, peak hour, quietest hour, and mini hourly bars.
+- `/quiet-finder`: recommendation-style ranked areas based on time window, avoided noise source, and max intensity.
+- `/me`: authenticated user impact page with reports, upvotes, areas contributed, reputation, report mix, and recent submissions.
+- `/districts/[id]`: upgraded from a report list into a public area scorecard.
+- Navbar: add public exploration links, show `My Impact` only for authenticated users, and show `Admin` only for admins.
+
+New frontend shared types include `AreaScorecard`, `PublicInsights`, `AreaComparison`, `QuietFinderResponse`, and `MyImpact`.
+
+### Verification Status For This Update
+
+Verified locally:
+
+```bash
+npm.cmd run test --prefix server
+npm.cmd run build --prefix client
+npm.cmd run build --prefix server
+```
+
+The server build initially surfaced a TypeScript inference issue in `public.service.ts`; it was fixed by explicitly typing hourly summaries before final build verification.
 
 ---
 
@@ -2915,6 +2990,17 @@ export default nextConfig;
 
 ## Execution Plan (Build Order)
 
+### Public Exploration Addendum
+
+After Phase 4 public map and area pages, add the public exploration layer:
+
+1. Add `/api/public` routes, controller, service, and validators for public insights, area scorecards, area comparison, and quiet finder.
+2. Add `/api/users/me/impact` before the admin-only `/api/users` route guard so authenticated users can view their own contribution summary.
+3. Upgrade `/districts/[id]` from a basic report list into a public scorecard with quiet score, Lahore average comparison, top source, peak hour, quietest hour, charts, and recent reports.
+4. Add `/insights`, `/compare`, `/quiet-finder`, and `/me` frontend pages.
+5. Update navbar discovery: public links for Insights, Compare, and Quiet Finder; authenticated-only My Impact; admin-only Admin link.
+6. Add backend integration tests covering public endpoint success, invalid filters, missing area IDs, admin route protection, and current-user impact auth behavior.
+
 ### Phase 1 — Backend Foundation (Days 1-2)
 1. ☐ Initialize root `shor-lahore` repo with `npm init`, install `concurrently`, then initialize `server/` with `npm init` and install all server dependencies
 2. ☐ Set up `tsconfig.json`, `nodemon.json`, `.env.example`
@@ -3009,6 +3095,9 @@ export default nextConfig;
 - **Heatmap**: `/heatmap?swLng=74.2&swLat=31.4&neLng=74.5&neLat=31.6` returns data points
 - **Analytics**: All 8 `/analytics/*` endpoints return valid data shapes
 - **Analytics Edge Cases**: no data, single report, sparse hours, unknown district, invalid date range, large result set pagination
+- **Public Exploration**: `/api/public/insights`, `/api/public/areas/:id/scorecard`, `/api/public/compare`, and `/api/public/quiet-finder` return public-safe aggregate data
+- **Public Exploration Edge Cases**: invalid period, invalid area ID, missing area, invalid noise type, invalid max intensity, too many compare IDs, empty data, and admin analytics still protected
+- **User Impact**: `/api/users/me/impact` rejects unauthenticated users and returns only the current user's reports, upvotes, areas contributed, and noise type mix
 - **Seed Script**: `npm run seed` populates 800+ reports, 10 districts, 25+ users
 - **Build**: `npm run build` succeeds on both client and server with 0 TypeScript errors
 - **Frontend Components**: every reusable component has loading, empty, disabled, error, overflow, and mobile states verified by tests or browser screenshots
@@ -3017,6 +3106,11 @@ export default nextConfig;
 - **Map**: Open `/map`, verify heatmap renders over Lahore, drag time slider → heatmap shifts
 - **Report Flow**: Submit report → appears on map in real-time via Socket.io
 - **Dashboard**: Open `/admin` → all charts render with seeded data → numbers match
+- **Public Insights**: Open `/insights` and verify KPI cards, charts, matrix, rankings, and recent reports render from public aggregate APIs
+- **Area Scorecards**: Open `/districts/:id` and verify quiet score, Lahore average comparison, peak/quiet hours, charts, and recent reports render
+- **Compare Areas**: Open `/compare` and verify default comparison loads and selected 2-3 areas update the cards
+- **Quiet Finder**: Open `/quiet-finder` and verify time, source, and intensity filters update ranked area recommendations
+- **My Impact**: Open `/me` logged out and logged in; verify login gate and current-user contribution summary
 - **Responsive**: Test at 375px (mobile), 768px (tablet), 1440px (desktop)
 - **Small Mobile**: Test at 320px and verify no horizontal scroll, clipped buttons, overlapping text, unusable forms, unreachable map controls, or broken modals
 - **Performance**: Heatmap stays at 60fps with 500+ data points
