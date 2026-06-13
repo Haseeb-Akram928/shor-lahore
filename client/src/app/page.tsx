@@ -48,8 +48,8 @@ const features = [
   },
   {
     icon: BarChart3,
-    title: 'District Analytics',
-    description: 'Compare noise levels across Lahore\'s districts with hourly breakdowns and trend analysis.',
+    title: 'Area Analytics',
+    description: 'Compare noise levels across Lahore\'s neighborhoods and commercial areas with hourly breakdowns and trend analysis.',
   },
   {
     icon: Zap,
@@ -122,7 +122,7 @@ export default function Home() {
         <div className="container">
           <div className={styles.statsGrid}>
             <CountUp end={900} label="Noise Reports" icon={<FileText size={20} />} suffix="+" />
-            <CountUp end={10} label="Districts Mapped" icon={<MapPin size={20} />} />
+            <CountUp end={10} label="Areas Mapped" icon={<MapPin size={20} />} />
             <CountUp end={12} label="Noise Categories" icon={<Radio size={20} />} />
             <CountUp end={24} label="Hours Tracked" icon={<TrendingUp size={20} />} suffix="h" />
           </div>

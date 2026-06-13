@@ -12,7 +12,7 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/map', label: 'Map' },
   { href: '/report', label: 'Report' },
-  { href: '/districts', label: 'Districts' },
+  { href: '/districts', label: 'Areas' },
   { href: '/admin', label: 'Admin' },
 ];
 

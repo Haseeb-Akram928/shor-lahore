@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  bulkUpdateReportStatus,
   createReport,
   deleteReport,
   getHeatmapReports,
@@ -15,6 +16,7 @@ import { validate } from '../middleware/validate.middleware.js';
 import {
   createReportSchema,
   adminReportQuerySchema,
+  bulkUpdateReportStatusSchema,
   heatmapQuerySchema,
   nearbyQuerySchema,
   recentQuerySchema,
@@ -27,6 +29,7 @@ router.get('/recent', validate(recentQuerySchema, 'query'), getRecentReports);
 router.get('/nearby', validate(nearbyQuerySchema, 'query'), getNearbyReports);
 router.get('/heatmap', validate(heatmapQuerySchema, 'query'), getHeatmapReports);
 router.get('/admin', protect, restrictTo('admin'), validate(adminReportQuerySchema, 'query'), listAdminReports);
+router.patch('/admin/bulk-status', protect, restrictTo('admin'), validate(bulkUpdateReportStatusSchema), bulkUpdateReportStatus);
 router.post('/', protect, reportLimiter, validate(createReportSchema), createReport);
 router.post('/:id/upvote', protect, upvoteReport);
 router.patch('/:id/status', protect, restrictTo('admin'), validate(updateReportStatusSchema), updateReportStatus);

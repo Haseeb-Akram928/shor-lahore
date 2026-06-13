@@ -3,7 +3,7 @@
 ## Project
 ShorLahore is a crowdsourced noise pollution mapping platform for Lahore, Pakistan.
 
-Residents report noise by location, type, intensity, time, and description. The app visualizes reports through maps, heatmaps, district analytics, and admin dashboards.
+Residents report noise by location, type, intensity, time, and description. The app visualizes reports through maps, heatmaps, area analytics, and admin dashboards.
 
 ## Core Goal
 Build a production-grade full-stack portfolio project with real geospatial engineering, real-time updates, strong testing, and polished UI.

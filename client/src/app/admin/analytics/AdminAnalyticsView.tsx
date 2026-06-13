@@ -4,11 +4,20 @@ import { useEffect, useState } from 'react';
 import { DistrictRankChart } from '@/components/charts/DistrictRankChart/DistrictRankChart';
 import { HourlyBarChart } from '@/components/charts/HourlyBarChart/HourlyBarChart';
 import { IntensityHeatmapGrid } from '@/components/charts/IntensityHeatmapGrid/IntensityHeatmapGrid';
+import { NoiseTypePieChart } from '@/components/charts/NoiseTypePieChart/NoiseTypePieChart';
 import { PeakHourRadarChart } from '@/components/charts/PeakHourRadarChart/PeakHourRadarChart';
 import { TrendLineChart } from '@/components/charts/TrendLineChart/TrendLineChart';
 import { Button } from '@/components/ui/Button/Button';
 import { api } from '@/lib/api';
-import type { AnalyticsPeriod, ApiResponse, DistrictStats, HeatmapGridCell, HourlyStats, TrendPoint } from '@/types';
+import type {
+  AnalyticsPeriod,
+  ApiResponse,
+  DistrictStats,
+  HeatmapGridCell,
+  HourlyStats,
+  NoiseTypeBreakdown,
+  TrendPoint,
+} from '@/types';
 import styles from '../adminRoute.module.css';
 
 const PERIODS: Array<{ label: string; value: AnalyticsPeriod }> = [
@@ -25,6 +34,7 @@ export function AdminAnalyticsView() {
   const [hourly, setHourly] = useState<HourlyStats[]>([]);
   const [districts, setDistricts] = useState<DistrictStats[]>([]);
   const [trends, setTrends] = useState<TrendPoint[]>([]);
+  const [byType, setByType] = useState<NoiseTypeBreakdown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,11 +45,12 @@ export function AdminAnalyticsView() {
       setIsLoading(true);
       setError(null);
       try {
-        const [heatmapRes, hourlyRes, districtsRes, trendsRes] = await Promise.all([
+        const [heatmapRes, hourlyRes, districtsRes, trendsRes, byTypeRes] = await Promise.all([
           api.get<ApiResponse<HeatmapGridCell[]>>('/analytics/heatmap-grid', { period }),
           api.get<ApiResponse<HourlyStats[]>>('/analytics/by-hour', { period }),
           api.get<ApiResponse<DistrictStats[]>>('/analytics/by-district', { period }),
           api.get<ApiResponse<TrendPoint[]>>('/analytics/trends', { period }),
+          api.get<ApiResponse<NoiseTypeBreakdown[]>>('/analytics/by-type', { period }),
         ]);
 
         if (!isCurrent) return;
@@ -47,6 +58,7 @@ export function AdminAnalyticsView() {
         setHourly(hourlyRes.data);
         setDistricts(districtsRes.data);
         setTrends(trendsRes.data);
+        setByType(byTypeRes.data);
       } catch (err) {
         if (!isCurrent) return;
         setError(err instanceof Error ? err.message : 'Unable to load analytics');
@@ -69,7 +81,7 @@ export function AdminAnalyticsView() {
         <div>
           <span className={styles.eyebrow}>Deep dive</span>
           <h1>Analytics</h1>
-          <p>Compare Lahore noise patterns by district, hour, trend, and intensity.</p>
+          <p>Compare Lahore noise patterns by area, hour, trend, and intensity.</p>
         </div>
         <div className={styles.actions} aria-label="Analytics period">
           {PERIODS.map((item) => (
@@ -92,6 +104,7 @@ export function AdminAnalyticsView() {
           <IntensityHeatmapGrid data={heatmap} isLoading={isLoading} error={panelError} />
         </div>
         <TrendLineChart data={trends} isLoading={isLoading} error={panelError} />
+        <NoiseTypePieChart data={byType} isLoading={isLoading} error={panelError} />
         <HourlyBarChart data={hourly} isLoading={isLoading} error={panelError} />
         <PeakHourRadarChart data={hourly} isLoading={isLoading} error={panelError} />
         <DistrictRankChart data={districts} isLoading={isLoading} error={panelError} />

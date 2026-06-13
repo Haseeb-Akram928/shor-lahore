@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AlertCircle, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Card } from '@/components/ui/Card/Card';
@@ -20,7 +21,7 @@ export function DistrictsView() {
         const response = await api.get<ApiResponse<District[]>>('/districts');
         setDistricts(response.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to load districts');
+        setError(err instanceof Error ? err.message : 'Unable to load areas');
       } finally {
         setIsLoading(false);
       }
@@ -33,8 +34,8 @@ export function DistrictsView() {
     <section className={styles.page}>
       <div className="container">
         <div className={styles.header}>
-          <Badge tone="brand">District intelligence</Badge>
-          <h1>Lahore districts</h1>
+          <Badge tone="brand">Area intelligence</Badge>
+          <h1>Lahore areas</h1>
           <p>See how noise patterns differ across Lahore, from report volume to average intensity.</p>
         </div>
 
@@ -51,28 +52,30 @@ export function DistrictsView() {
           </div>
         ) : districts.length === 0 ? (
           <Card className={styles.empty}>
-            <strong>No districts available</strong>
-            <span>Seed or create Lahore districts to populate this view.</span>
+            <strong>No areas available</strong>
+            <span>Seed or create Lahore areas to populate this view.</span>
           </Card>
         ) : (
           <div className={styles.grid}>
             {districts.map((district) => (
-              <Card key={district._id} className={styles.card}>
-                <div className={styles.cardTop}>
-                  <MapPin size={20} />
-                  <strong>{district.name}</strong>
-                </div>
-                <div className={styles.stats}>
-                  <span>
-                    <strong>{district.totalReports}</strong>
-                    reports
-                  </span>
-                  <span>
-                    <strong>{district.avgNoiseLevel.toFixed(1)}</strong>
-                    avg intensity
-                  </span>
-                </div>
-              </Card>
+              <Link key={district._id} href={`/districts/${district._id}`} className={styles.cardLink}>
+                <Card className={styles.card}>
+                  <div className={styles.cardTop}>
+                    <MapPin size={20} />
+                    <strong>{district.name}</strong>
+                  </div>
+                  <div className={styles.stats}>
+                    <span>
+                      <strong>{district.totalReports}</strong>
+                      reports
+                    </span>
+                    <span>
+                      <strong>{district.avgNoiseLevel.toFixed(1)}</strong>
+                      avg intensity
+                    </span>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         )}

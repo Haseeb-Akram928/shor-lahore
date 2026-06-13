@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Activity, BarChart3, Radio, Volume2 } from 'lucide-react';
+import Link from 'next/link';
+import { Activity, BarChart3, MapPin, Radio, Volume2 } from 'lucide-react';
 import { HourlyBarChart } from '@/components/charts/HourlyBarChart/HourlyBarChart';
 import { LiveFeed } from '@/components/admin/LiveFeed/LiveFeed';
 import { NoiseTypePieChart } from '@/components/charts/NoiseTypePieChart/NoiseTypePieChart';
@@ -127,6 +128,17 @@ export function AdminOverviewView() {
   }, [data.overview]);
 
   const chartError = error ? 'Unable to load this panel' : null;
+  const miniMapReports = useMemo(() => {
+    return data.recent
+      .filter((report) => Array.isArray(report.location?.coordinates))
+      .slice(0, 18)
+      .map((report) => {
+        const [lng, lat] = report.location.coordinates;
+        const left = Math.max(4, Math.min(96, ((lng - 73.8) / 1) * 100));
+        const top = Math.max(4, Math.min(96, (1 - ((lat - 31.2) / 0.6)) * 100));
+        return { report, left, top };
+      });
+  }, [data.recent]);
 
   return (
     <section className={styles.page}>
@@ -177,6 +189,47 @@ export function AdminOverviewView() {
         <NoiseTypePieChart data={data.byType} isLoading={isLoading} error={chartError} />
         <HourlyBarChart data={data.byHour} isLoading={isLoading} error={chartError} />
         <LiveFeed reports={data.recent} isLoading={isLoading} error={chartError} />
+        <Link className={styles.miniMapPanel} href="/map" aria-label="Open the live noise map">
+          <div className={styles.panelHeader}>
+            <div>
+              <h2>Recent report map</h2>
+              <span>{miniMapReports.length} plotted reports</span>
+            </div>
+            <span className={styles.panelAction}>
+              View map
+              <MapPin size={18} />
+            </span>
+          </div>
+          {isLoading ? (
+            <div className={styles.mapState}>Loading map points...</div>
+          ) : chartError ? (
+            <div className={styles.mapState}>{chartError}</div>
+          ) : miniMapReports.length === 0 ? (
+            <div className={styles.mapState}>No recent reports to map</div>
+          ) : (
+            <div className={styles.miniMap} aria-label="Recent report coordinate preview">
+              <span className={styles.mapLabel}>Lahore</span>
+              {miniMapReports.map(({ report, left, top }) => {
+                const config = NOISE_TYPE_CONFIG[report.noiseType];
+                return (
+                  <span
+                    key={report._id}
+                    className={styles.mapDot}
+                    style={{
+                      left: `${left}%`,
+                      top: `${top}%`,
+                      background: config.color,
+                      color: config.color,
+                      width: `${Math.max(9, report.intensity + 6)}px`,
+                      height: `${Math.max(9, report.intensity + 6)}px`,
+                    }}
+                    title={`${config.label}: ${report.intensity}/10`}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </Link>
       </div>
     </section>
   );
