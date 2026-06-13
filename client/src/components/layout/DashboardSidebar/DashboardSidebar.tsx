@@ -12,7 +12,7 @@ const items = [
   { href: '/admin', label: 'Overview', icon: Gauge },
   { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/admin/reports', label: 'Reports', icon: Table },
-  { href: '/admin/districts', label: 'Districts', icon: Map },
+  { href: '/admin/districts', label: 'Areas', icon: Map },
   { href: '/admin/users', label: 'Users', icon: Users },
 ];
 

@@ -45,6 +45,8 @@ export const listAdminReports = catchAsync(async (req: Request, res: Response) =
     noiseType: req.query.noiseType as never,
     status: req.query.status as never,
     district: req.query.district as string | undefined,
+    from: req.query.from as unknown as Date | undefined,
+    to: req.query.to as unknown as Date | undefined,
     minIntensity: req.query.minIntensity as unknown as number | undefined,
     maxIntensity: req.query.maxIntensity as unknown as number | undefined,
   });
@@ -104,6 +106,14 @@ export const updateReportStatus = catchAsync(async (req: Request, res: Response)
   res.status(200).json({
     success: true,
     data: { report },
+  });
+});
+
+export const bulkUpdateReportStatus = catchAsync(async (req: Request, res: Response) => {
+  const result = await reportService.bulkUpdateReportStatus(req.body.ids, req.body.status);
+  res.status(200).json({
+    success: true,
+    data: result,
   });
 });
 

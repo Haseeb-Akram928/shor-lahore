@@ -2,14 +2,14 @@
 
 ShorLahore is a crowdsourced noise pollution mapping and analytics platform for Lahore, Pakistan.
 
-The project lets residents report local noise by type, intensity, time, and location. Over time, those reports can power a live city noise map, heatmaps, district-level analysis, and admin dashboards for residents, planners, and researchers.
+The project lets residents report local noise by type, intensity, time, and location. Over time, those reports can power a live city noise map, heatmaps, area-level analysis, and admin dashboards for residents, planners, and researchers.
 
 ## Features
 
 - Geospatial noise reporting with GeoJSON coordinates
-- Lahore district mapping using geospatial queries
-- District API for listing districts, creating admin-managed districts, and fetching reports inside district boundaries
-- Analytics API for overview KPIs, trends, noise type breakdowns, district stats, hourly distribution, heatmap grids, top reporters, and recent reports
+- Lahore area mapping using geospatial queries
+- Area API for listing mapped areas, creating admin-managed areas, and fetching reports inside area boundaries
+- Analytics API for overview KPIs, trends, noise type breakdowns, area stats, hourly distribution, heatmap grids, top reporters, and recent reports
 - Admin report management API for filtering reports, updating report status, and deleting reports
 - Admin user management API for searching users, changing roles, and activating or deactivating accounts
 - Seed script that generates Lahore-focused mock data for development and demos
@@ -19,10 +19,10 @@ The project lets residents report local noise by type, intensity, time, and loca
 - Socket.io foundation for real-time map and dashboard updates
 - Interactive Lahore noise map with MapLibre and deck.gl heatmap rendering
 - Noise report submission flow with map-based location picking
-- Public districts page with loading, empty, and error states
-- Protected admin dashboard with overview KPIs, trend charts, noise type donut chart, hourly profile, and live report feed
-- Admin analytics deep-dive page with district-hour intensity matrix, peak-hour radar, trend chart, hourly bar chart, and district ranking
-- Admin report, user, and district management pages with filters, responsive tables, status controls, and role/access controls
+- Public areas page with area detail drill-downs, paginated area reports, loading, empty, and error states
+- Protected admin dashboard with overview KPIs, trend charts, compact recent-report map, noise type donut chart, hourly profile, and live report feed
+- Admin analytics deep-dive page with area-hour intensity matrix, noise type breakdown, peak-hour radar, trend chart, hourly bar chart, and area ranking
+- Admin report, user, and area management pages with filters, responsive tables, bulk report moderation, status controls, role/access controls, and area creation
 - Backend integration tests using Vitest, Supertest, and MongoDB Memory Server
 - GitHub Actions workflow for automated build and test checks
 - Next.js frontend foundation with responsive layout, auth pages, UI primitives, and theme/auth providers
@@ -43,25 +43,26 @@ The project lets residents report local noise by type, intensity, time, and loca
 
 ## Current Status
 
-Phase 5 is implemented.
+Phase 6 final polish is implemented, except Google OAuth, which is intentionally deferred until deployment.
 
 Implemented backend work:
 
 - Phase 1 backend foundation
-- District API
+- Area mapping API
 - Analytics API
 - Admin report management API
 - Admin user management API
 - Seed data engine
 - GitHub Actions backend CI
-- Backend integration tests for health, districts, analytics, report heatmap data, admin management, and seed data
+- Backend integration tests for health, mapped areas, analytics, report heatmap data, admin management, and seed data
 - Frontend foundation with app shell, homepage, login/signup pages, admin shell, UI primitives, API client, Socket.io client, and theme/auth contexts
-- Phase 4 public pages: interactive map, heatmap overlay, time/intensity filters, report form, and districts view
-- Phase 5 admin pages: overview dashboard, analytics deep dive, report management, user management, and district management
+- Phase 4 public pages: interactive map, heatmap overlay, time/intensity filters, report form, and areas view
+- Phase 5 admin pages: overview dashboard, analytics deep dive, report management, user management, and area management
+- Phase 6 completion work: public area detail pages, admin overview mini map, admin report date/max filters, bulk report moderation, admin area creation form, and README polish
 
 Seed data includes:
 
-- 10 Lahore districts
+- 10 Lahore areas
 - 25 mock users
 - 900 mock noise reports
 
@@ -161,7 +162,7 @@ After configuring `server/.env`, seed the database:
 npm run seed --prefix server
 ```
 
-The seed script resets users, districts, and reports, then creates the Lahore demo dataset and the default admin account.
+The seed script resets users, mapped areas, and reports, then creates the Lahore demo dataset and the default admin account.
 
 ## Running the Backend
 
@@ -199,6 +200,7 @@ Useful routes:
 /map
 /report
 /districts
+/districts/:id
 /admin
 /admin/analytics
 /admin/reports
@@ -216,7 +218,7 @@ npm run test --prefix server
 
 Tests run against MongoDB Memory Server and do not touch the development database.
 
-Current backend coverage includes health, district routes, analytics routes, report heatmap routes, admin report/user management routes, role protection, seed data integrity, and selected edge cases.
+Current backend coverage includes health, area-mapping routes, analytics routes, report heatmap routes, admin report/user management routes, role protection, seed data integrity, and selected edge cases.
 
 ## Build
 

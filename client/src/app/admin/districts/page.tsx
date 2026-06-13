@@ -1,7 +1,7 @@
 import { AdminDistrictsView } from './AdminDistrictsView';
 
 export const metadata = {
-  title: 'Admin Districts',
+  title: 'Admin Areas',
 };
 
 export default function AdminDistrictsPage() {

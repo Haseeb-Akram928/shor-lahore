@@ -33,6 +33,11 @@ export interface GeoJSONPoint {
   coordinates: [number, number];
 }
 
+export interface GeoJSONPolygon {
+  type: 'Polygon';
+  coordinates: [number, number][][];
+}
+
 export interface NoiseReport {
   _id: string;
   user: User | string;
@@ -67,6 +72,7 @@ export interface District {
   _id: string;
   name: string;
   city: string;
+  boundary?: GeoJSONPolygon;
   avgNoiseLevel: number;
   totalReports: number;
   createdAt?: string;

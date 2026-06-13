@@ -85,6 +85,8 @@ interface AdminReportListInput {
   noiseType?: NoiseType;
   status?: ReportStatus;
   district?: string;
+  from?: Date;
+  to?: Date;
   minIntensity?: number;
   maxIntensity?: number;
 }
@@ -95,6 +97,12 @@ export async function listAdminReports(input: AdminReportListInput) {
   if (input.noiseType) filter.noiseType = input.noiseType;
   if (input.status) filter.status = input.status;
   if (input.district) filter.district = input.district;
+  if (input.from || input.to) {
+    filter.occurredAt = {
+      ...(input.from && { $gte: input.from }),
+      ...(input.to && { $lte: input.to }),
+    };
+  }
   if (input.minIntensity !== undefined || input.maxIntensity !== undefined) {
     filter.intensity = {
       ...(input.minIntensity !== undefined && { $gte: input.minIntensity }),
@@ -297,6 +305,30 @@ export async function updateReportStatus(reportId: string, status: ReportStatus)
   }
 
   return report;
+}
+
+export async function bulkUpdateReportStatus(reportIds: string[], status: ReportStatus) {
+  const invalidId = reportIds.find((reportId) => !mongoose.Types.ObjectId.isValid(reportId));
+  if (invalidId) {
+    throw ApiError.badRequest('Invalid report ID');
+  }
+
+  const uniqueIds = Array.from(new Set(reportIds));
+  const result = await NoiseReport.updateMany(
+    { _id: { $in: uniqueIds } },
+    { status },
+    { runValidators: true }
+  );
+
+  const reports = await NoiseReport.find({ _id: { $in: uniqueIds } })
+    .sort({ createdAt: -1 })
+    .populate('user', 'name email avatar');
+
+  return {
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount,
+    reports,
+  };
 }
 
 export async function deleteReport(reportId: string) {

@@ -24,6 +24,7 @@ describe('Admin Management Integration Tests', () => {
     noiseType: 'traffic' | 'music';
     intensity: number;
     status: 'active' | 'resolved' | 'flagged';
+    occurredAt: Date;
   }> = {}) => {
     return NoiseReport.create({
       user: userId,
@@ -35,7 +36,7 @@ describe('Admin Management Integration Tests', () => {
       intensity: overrides.intensity ?? 7,
       district: 'Gulberg',
       status: overrides.status || 'active',
-      occurredAt: new Date(Date.now() - 60 * 60 * 1000),
+      occurredAt: overrides.occurredAt || new Date(Date.now() - 60 * 60 * 1000),
     });
   };
 
@@ -116,6 +117,62 @@ describe('Admin Management Integration Tests', () => {
       expect(response.body.data).toHaveLength(1);
       expect(response.body.data[0].noiseType).toBe('traffic');
       expect(response.body.data[0].user.name).toBe('user reporter');
+    });
+
+    it('should list reports within an occurrence date range', async () => {
+      const admin = await createUser('admin', 'owner');
+      const user = await createUser('user', 'reporter');
+      await createReport(user._id.toString(), { occurredAt: new Date('2026-01-10T08:00:00.000Z') });
+      await createReport(user._id.toString(), { occurredAt: new Date('2026-02-10T08:00:00.000Z') });
+
+      const response = await request(app)
+        .get('/api/reports/admin?from=2026-02-01T00:00:00.000Z&to=2026-02-28T23:59:59.999Z')
+        .set('Cookie', [`token=${tokenFor(admin)}`]);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].occurredAt).toBe('2026-02-10T08:00:00.000Z');
+    });
+  });
+
+  describe('PATCH /api/reports/admin/bulk-status', () => {
+    it('should update multiple report statuses for admins', async () => {
+      const admin = await createUser('admin', 'owner');
+      const user = await createUser('user', 'reporter');
+      const firstReport = await createReport(user._id.toString());
+      const secondReport = await createReport(user._id.toString(), { noiseType: 'music' });
+
+      const response = await request(app)
+        .patch('/api/reports/admin/bulk-status')
+        .set('Cookie', [`token=${tokenFor(admin)}`])
+        .send({ ids: [firstReport._id.toString(), secondReport._id.toString()], status: 'flagged' });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.matchedCount).toBe(2);
+      expect(response.body.data.reports).toHaveLength(2);
+      expect(response.body.data.reports.every((report: { status: string }) => report.status === 'flagged')).toBe(true);
+    });
+
+    it('should reject invalid bulk status payloads', async () => {
+      const admin = await createUser('admin', 'owner');
+
+      const response = await request(app)
+        .patch('/api/reports/admin/bulk-status')
+        .set('Cookie', [`token=${tokenFor(admin)}`])
+        .send({ ids: [], status: 'resolved' });
+
+      expect(response.status).toBe(400);
+    });
+
+    it('should reject non-admin bulk status requests', async () => {
+      const user = await createUser('user', 'regular');
+
+      const response = await request(app)
+        .patch('/api/reports/admin/bulk-status')
+        .set('Cookie', [`token=${tokenFor(user)}`])
+        .send({ ids: ['507f1f77bcf86cd799439011'], status: 'resolved' });
+
+      expect(response.status).toBe(403);
     });
   });
 

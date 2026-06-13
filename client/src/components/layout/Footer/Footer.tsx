@@ -8,7 +8,7 @@ const navSections = [
     links: [
       { href: '/map', label: 'Noise Map' },
       { href: '/report', label: 'Report Noise' },
-      { href: '/districts', label: 'Districts' },
+      { href: '/districts', label: 'Areas' },
     ],
   },
   {

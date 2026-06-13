@@ -1,7 +1,7 @@
 import { DistrictsView } from './DistrictsView';
 
 export const metadata = {
-  title: 'Districts',
+  title: 'Lahore Areas',
 };
 
 export default function DistrictsPage() {

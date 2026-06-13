@@ -57,6 +57,61 @@
   grid-column: 1 / -1;
 }
 
+.managementPanel {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  padding: 16px;
+}
+
+.managementPanel h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.managementPanel p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.textareaField {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 7px;
+}
+
+.textareaField span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.textareaField textarea {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text);
+  padding: 12px;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.textareaField textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  outline-offset: 2px;
+}
+
 .tableHeader {
   display: flex;
   align-items: center;
@@ -85,6 +140,30 @@
   align-items: center;
 }
 
+.checkbox {
+  display: grid;
+  width: 16px;
+  height: 16px;
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--text-muted) 45%, var(--border));
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface-muted) 70%, var(--surface));
+  cursor: pointer;
+}
+
+.checkbox:checked {
+  border-color: var(--brand);
+  background:
+    linear-gradient(135deg, transparent 42%, var(--surface) 43% 57%, transparent 58%),
+    linear-gradient(45deg, transparent 48%, var(--surface) 49% 58%, transparent 59%),
+    var(--brand);
+}
+
+.checkbox:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand) 32%, transparent);
+  outline-offset: 2px;
+}
+
 .statusActions {
   display: inline-flex;
   align-items: center;
@@ -99,25 +178,76 @@
 }
 
 .compactSelect {
-  min-width: 126px;
-  min-height: 38px;
+  min-width: 118px;
+  min-height: 36px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 0 10px;
   color: var(--text);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface-muted) 36%, var(--surface));
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .pill {
   display: inline-flex;
-  min-width: 34px;
-  min-height: 28px;
+  min-width: 32px;
+  min-height: 26px;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  color: #fff;
-  font-weight: 900;
+  border: 1px solid;
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  font-weight: 800;
   font-size: 0.8rem;
+}
+
+.typeToken {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  padding: 0 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.rowActions {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.iconAction,
+.dangerIconAction {
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 8px;
+  padding: 0;
+  color: var(--text-muted);
+  box-shadow: none !important;
+}
+
+.iconAction:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface-muted) 70%, transparent);
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.dangerIconAction {
+  color: color-mix(in srgb, var(--danger) 78%, var(--text-muted));
+}
+
+.dangerIconAction:hover {
+  border-color: color-mix(in srgb, var(--danger) 28%, var(--border));
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 9%, transparent);
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .truncate {
@@ -151,6 +281,10 @@
   }
 
   .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .formGrid {
     grid-template-columns: 1fr;
   }
 }

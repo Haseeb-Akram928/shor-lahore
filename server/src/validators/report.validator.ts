@@ -86,6 +86,8 @@ export const adminReportQuerySchema = z.object({
   noiseType: z.enum(NOISE_TYPES).optional(),
   status: z.enum(REPORT_STATUSES).optional(),
   district: z.string().trim().min(1).max(80).optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
   minIntensity: z.coerce.number().int().min(1).max(10).optional(),
   maxIntensity: z.coerce.number().int().min(1).max(10).optional(),
 }).superRefine((query, ctx) => {
@@ -100,8 +102,21 @@ export const adminReportQuerySchema = z.object({
       path: ['minIntensity'],
     });
   }
+
+  if (query.from && query.to && query.from > query.to) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'from cannot be later than to',
+      path: ['from'],
+    });
+  }
 });
 
 export const updateReportStatusSchema = z.object({
+  status: z.enum(REPORT_STATUSES),
+});
+
+export const bulkUpdateReportStatusSchema = z.object({
+  ids: z.array(z.string().refine((value) => /^[a-f\d]{24}$/i.test(value), 'Invalid report ID')).min(1).max(100),
   status: z.enum(REPORT_STATUSES),
 });

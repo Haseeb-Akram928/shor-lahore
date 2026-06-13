@@ -16,11 +16,11 @@ export function DistrictRankChart({ data, isLoading = false, error = null }: Dis
 
   return (
     <Card className={styles.card}>
-      <h2>District ranking</h2>
+      <h2>Area ranking</h2>
       <p>Highest average intensity first</p>
-      {isLoading && <div className={styles.state}>Loading districts...</div>}
+      {isLoading && <div className={styles.state}>Loading areas...</div>}
       {!isLoading && error && <div className={styles.state}>{error}</div>}
-      {!isLoading && !error && rows.length === 0 && <div className={styles.state}>No district data yet</div>}
+      {!isLoading && !error && rows.length === 0 && <div className={styles.state}>No area data yet</div>}
       {!isLoading && !error && rows.length > 0 && (
         <div className={styles.chart}>
           <ResponsiveContainer width="100%" height="100%">
