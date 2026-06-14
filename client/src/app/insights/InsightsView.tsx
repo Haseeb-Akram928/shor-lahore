@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Activity, BarChart3, MapPin, Radio } from 'lucide-react';
 import { DistrictRankChart } from '@/components/charts/DistrictRankChart/DistrictRankChart';
 import { HourlyBarChart } from '@/components/charts/HourlyBarChart/HourlyBarChart';
-import { IntensityHeatmapGrid } from '@/components/charts/IntensityHeatmapGrid/IntensityHeatmapGrid';
 import { NoiseTypePieChart } from '@/components/charts/NoiseTypePieChart/NoiseTypePieChart';
 import { TrendLineChart } from '@/components/charts/TrendLineChart/TrendLineChart';
 import { Badge } from '@/components/ui/Badge/Badge';
@@ -87,9 +86,6 @@ export function InsightsView() {
           </div>
 
           <div className={styles.panelGrid}>
-            <div className={styles.wide}>
-              <IntensityHeatmapGrid data={data?.heatmapGrid ?? []} isLoading={isLoading} error={chartError} />
-            </div>
             <TrendLineChart data={data?.trends ?? []} isLoading={isLoading} error={chartError} />
             <NoiseTypePieChart data={data?.byType ?? []} isLoading={isLoading} error={chartError} />
             <HourlyBarChart data={data?.byHour ?? []} isLoading={isLoading} error={chartError} />

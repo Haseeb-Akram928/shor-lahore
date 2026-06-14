@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 export class ApiClientError extends Error {
   status: number;
@@ -16,7 +16,8 @@ interface FetchOptions extends RequestInit {
 
 async function request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { params, headers, ...fetchOptions } = options;
-  const url = new URL(`${API_BASE}${endpoint}`);
+  const origin = typeof window === 'undefined' ? 'http://localhost:3000' : window.location.origin;
+  const url = new URL(`${API_BASE}${endpoint}`, origin);
 
   if (params) {
     for (const [key, value] of Object.entries(params)) {

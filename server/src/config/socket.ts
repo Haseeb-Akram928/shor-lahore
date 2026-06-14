@@ -1,13 +1,13 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketServer } from 'socket.io';
-import { env } from './env.js';
+import { corsOrigin } from '../utils/corsOrigin.js';
 
 let io: SocketServer;
 
 export const initSocket = (httpServer: HttpServer): SocketServer => {
   io = new SocketServer(httpServer, {
     cors: {
-      origin: env.CLIENT_URL,
+      origin: corsOrigin,
       credentials: true,
     },
     pingInterval: 25000,

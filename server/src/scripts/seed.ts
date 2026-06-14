@@ -101,6 +101,17 @@ const districtsData: DistrictSeed[] = [
 
 const totalDistrictWeight = districtsData.reduce((sum, district) => sum + district.percentage, 0);
 
+const getSeedAdminCredentials = () => {
+  const email = env.SEED_ADMIN_EMAIL || 'admin@shorlahore.com';
+  const password = env.SEED_ADMIN_PASSWORD || (env.NODE_ENV === 'production' ? '' : 'Admin@123456');
+
+  if (!password) {
+    throw new Error('SEED_ADMIN_PASSWORD must be set before seeding production data.');
+  }
+
+  return { email, password };
+};
+
 const generateBoundingBox = (center: [number, number]) => {
   const [lng, lat] = center;
   const lngOffset = 0.0125;
@@ -169,13 +180,14 @@ export const runSeed = async (disconnectOnFinish = true) => {
     console.log('Cleared existing data.');
 
     // 1. Create Default Admin
+    const adminCredentials = getSeedAdminCredentials();
     await User.create({
       name: 'ShorLahore Admin',
-      email: 'admin@shorlahore.com',
-      password: 'Admin@123456',
+      email: adminCredentials.email,
+      password: adminCredentials.password,
       role: 'admin',
     });
-    console.log('Default admin user created.');
+    console.log(`Default admin user created: ${adminCredentials.email}`);
 
     // 2. Create Fake Users
     const users = [];

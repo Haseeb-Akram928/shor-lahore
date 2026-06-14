@@ -67,12 +67,14 @@ Seed data includes:
 - 25 mock users
 - 900 mock noise reports
 
-Seeded admin account:
+Seeded admin account credentials are configured through environment variables:
 
 ```text
-Email: admin@shorlahore.com
-Password: Admin@123456
+SEED_ADMIN_EMAIL=admin@shorlahore.com
+SEED_ADMIN_PASSWORD=<set-a-private-password-before-production-seeding>
 ```
+
+For production, set a strong private `SEED_ADMIN_PASSWORD` before running the seed command. The seed script will refuse to create a production admin without it.
 
 ## Project Structure
 
