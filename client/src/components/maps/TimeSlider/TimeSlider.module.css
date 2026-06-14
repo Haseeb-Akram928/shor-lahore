@@ -45,4 +45,9 @@
     display: grid;
     grid-template-columns: 46px 1fr 46px;
   }
+
+  .controls button {
+    padding: 0;
+  }
 }
+
