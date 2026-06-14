@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/Input/Input';
 import { useAuth } from '@/context/AuthContext';
 import styles from './SignupForm.module.css';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 export function SignupForm() {
   const router = useRouter();

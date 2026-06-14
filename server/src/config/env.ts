@@ -20,6 +20,8 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GOOGLE_REDIRECT_URI: z.string().url().optional(),
+  SEED_ADMIN_EMAIL: z.string().email().optional(),
+  SEED_ADMIN_PASSWORD: z.string().min(8).max(128).optional(),
 });
 
 export const env = envSchema.parse(process.env);

@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import { env } from './config/env.js';
 import { globalLimiter } from './middleware/rateLimiter.middleware.js';
 import { errorHandler } from './middleware/error.middleware.js';
+import { corsOrigin } from './utils/corsOrigin.js';
 
 // Route imports
 import authRoutes from './routes/auth.routes.js';
@@ -20,7 +21,7 @@ const app = express();
 // ============ GLOBAL MIDDLEWARE ============
 app.use(helmet());
 app.use(cors({
-  origin: env.CLIENT_URL,
+  origin: corsOrigin,
   credentials: true,
 }));
 app.use(cookieParser());
